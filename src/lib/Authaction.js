@@ -19,7 +19,7 @@ export const handleLogout = async () => {
 };
 
 export const findUserByEmail = async (email) => {
-  if (!email) return null;
+  if (!email) return null
   const user = await db.profile.findUnique({
     where: { email },
     select: {
