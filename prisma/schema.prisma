@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id           String         @id @default(uuid())
+  firstName    String
+  lastName     String
+  username     String         @unique
+  email        String         @unique
+  bio          String         @default("")
+  password     String
+  profileImage String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @default(now())
+  Social_Links Social_Links[]
+  Account_Info Account_Info[]
+  Blogs        Blogs[]
+}
+
+model Social_Links {
+  id        String  @id @default(uuid())
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String
+  youtube   String
+  instagram String
+  facebook  String
+  twitter   String
+  github    String
+  website   String
+}
+
+model Account_Info {
+  id          String  @id @default(uuid())
+  profile     Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId   String
+  total_post  String
+  total_reads Int     @default(0)
+  google_auth Boolean @default(false)
+  Blogs       Blogs[]
+}
+
+model Blogs {
+  id        String       @id @default(uuid())
+  profile   Profile      @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String
+  account   Account_Info @relation(fields: [AccountId], references: [id], onDelete: Cascade)
+  AccountId String
+}
