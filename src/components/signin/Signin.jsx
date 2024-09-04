@@ -26,7 +26,7 @@ const signin = () => {
         </CardContent>
         <CardFooter>
           <p>
-            Don't have an account?
+            {"Don't have an account?"}
             <Link href="/signup">
             <span className="underline">Join us today</span>
             </Link>
