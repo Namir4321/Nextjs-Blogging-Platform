@@ -4,6 +4,7 @@ import Image from "next/image";
 import FormContainer from "@/components/form/FormContainer";
 import ImageInput from "@/components/form/ImageInput";
 import { Button } from "@/components/ui/button";
+import {ButtonProp} from "@/components/form/ButtonProp"
 
 const ImageFormContainer = ({ image, name, action, text, children }) => {
  const [isUpdateFormVisible, setUpdateFormVisible] = useState(false);
@@ -35,7 +36,7 @@ const ImageFormContainer = ({ image, name, action, text, children }) => {
            <FormContainer action={action}>
              {children}
              <ImageInput />
-             <SubmitButton btnsize="sm" text={text} />
+             <ButtonProp btnsize="sm" text={text} />
            </FormContainer>
          </div>
        )}
