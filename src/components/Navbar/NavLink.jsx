@@ -12,19 +12,22 @@ import { Button } from "../ui/button";
 import NavUserIcon from "@/components/Navbar/NavUserIcon";
 import NavSignOut from "./NavSignOut";
 import { getProfileImage } from "@/utils/action";
+import Link from "next/link";
 
-const NavLink = async() => {
-  const profile=await getProfileImage();
+const NavLink = async () => {
+  const profile = await getProfileImage();
   return (
     <>
       <DropdownMenu>
         <DropdownMenuTrigger>
-    <NavUserIcon/>
+          <NavUserIcon />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel className="flex gap-2">
-            Write
-            <LuFileSignature className="w-4 h-4" />
+            <Link href="/editor" className="flex gap-2">
+              Write
+              <LuFileSignature className="w-4 h-4" />
+            </Link>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>Profile</DropdownMenuItem>
@@ -32,7 +35,7 @@ const NavLink = async() => {
           <DropdownMenuItem>Setting</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem className="grid gap-1">
-            <NavSignOut/>
+            <NavSignOut />
             <h6 className="mx-1">{profile.username}</h6>
           </DropdownMenuItem>
         </DropdownMenuContent>

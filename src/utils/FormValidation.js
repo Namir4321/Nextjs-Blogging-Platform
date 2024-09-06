@@ -5,9 +5,9 @@ export const validateWithZodSchema = async (schema, data) => {
   const result = schema.safeParse(data);
   if (!result.success) {
     const errors = result.error.errors.map((error) => error.message);
-    throw new Error(errors.join(", "));
+    throw new Error(errors.join(", ")||errors);
   }
-  return result.data
+  return result.data;
 };
 
 export const logInSchema = z.object({
@@ -42,3 +42,20 @@ export const signUpSchema = z
     message: "Passwords do not match",
     path: ["confirmPassword"],
   });
+export const imageSchema = z.object({
+  image: validateFile(),
+});
+function validateFile() {
+  const maxUploadSize = 5 * 1024 * 1024;
+  const acceptedFileTypes = ["image/"];
+  return z
+    .instanceof(File)
+    .refine((file) => {
+      return file || file.size <= maxUploadSize;
+    }, "File size be must be less than 5mb")
+    .refine((file) => {
+      return (
+        !file || acceptedFileTypes.some((type) => file.type.startsWith(type))
+      );
+    }, "File must be an image");
+}

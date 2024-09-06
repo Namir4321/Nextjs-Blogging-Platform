@@ -11,7 +11,7 @@ export const authConfig = {
           const userSearch = await findUserByEmail(credentials.email);
            const isMatch=credentials.password===userSearch.password;
           if(isMatch) return userSearch
-          console.log(isMatch)
+          
           return null;
         } catch (error) {
           return {

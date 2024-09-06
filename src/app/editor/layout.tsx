@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import Navbar from "@/components/Navbar/Navbar";
+import "../globals.css";
+import EditNavbar from "@/components/editor/EditNavbar";
 import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,11 +16,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <Navbar/>
-        {children}
-      </body>
-    </html>
+    <section>
+      <EditNavbar/>
+      <main className="container py-10">{children}</main>
+      <Toaster />
+    </section>
   );
 }

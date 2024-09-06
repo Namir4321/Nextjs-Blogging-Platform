@@ -12,30 +12,42 @@ export const {
 } = NextAuth({
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      const existingUser = await findUserByEmail(user.email);
-      if (!existingUser) {
-        await db.profile.create({
-          data: {
-            email: user.email,
-            username: user.name,
-            profileImage: user.image,
-            password: hashedPassword,
-          },
-        });
+      try {
+        const existingUser = await findUserByEmail(user.email);
+        if (!existingUser) {
+          await db.profile.create({
+            data: {
+              email: user.email,
+              username: user.name,
+              profileImage: user.image,
+              password: hashedPassword,
+            },
+          });
+        }
+        return true;
+      } catch (error) {
+        return { message: error.message };
       }
-      return true;
     },
     async session({ token, session }) {
-      if (token.sub && session.user) {
-        session.user.id = token.sub;
+      try {
+        if (token.sub && session.user) {
+          session.user.id = token.sub;
+        }
+        return session;
+      } catch (err) {
+        return { message: err.message };
       }
-      return session;
     },
     async jwt({ token, user }) {
-      if (user) {
-        token.sub = user.id;
+      try {
+        if (user) {
+          token.sub = user.id;
+        }
+        return token;
+      } catch (err) {
+        return { message: err.message };
       }
-      return token;
     },
   },
   session: { strategy: "jwt" },

@@ -1,5 +1,7 @@
+'use server'
 import { auth } from "@/auth";
 import db from "@/utils/db";
+import { imageSchema, validateWithZodSchema } from "./FormValidation";
 export const getAuthUser = async () => {
   const session = await auth();
   if (!session) return null;
@@ -20,4 +22,11 @@ export const getProfileImage = async () => {
     },
   });
    return profile || null;
+};
+
+export const BlogImageAction = async (prevState, formData) => {
+  console.log("clicked")
+  const image = formData.get("image");
+  console.log(image)
+  const validateFields = await validateWithZodSchema(imageSchema, { image });
 };

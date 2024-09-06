@@ -37,8 +37,8 @@ export const findUserByEmail = async (email) => {
 };
 export const handleSignInAction = async (prevState, formData) => {
   const rawData = Object.fromEntries(formData);
-  const validateFields = await validateWithZodSchema(logInSchema, rawData);
   try {
+    const validateFields = await validateWithZodSchema(logInSchema, rawData);
     await signIn("credentials", {
       email: validateFields.email,
       password: validateFields.password,

@@ -6,7 +6,6 @@ import { CiBellOn } from "react-icons/ci";
 import NavLink from "@/components/Navbar/NavLink";
 const NavAuth = async () => {
   const isLoggedIn = await getAuthUser();
-  console.log(isLoggedIn);
   return (
     <div className="flex gap-4">
       {isLoggedIn ? (
