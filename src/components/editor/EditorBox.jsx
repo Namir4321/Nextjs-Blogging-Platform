@@ -19,16 +19,13 @@ import { UploadImage, UploadImageByUrl } from "@/utils/supabase";
 import { imageSchema, validateWithZodSchema } from "@/utils/FormValidation";
 const EditorBox = () => {
   const UploadImageByLink = async (image) => {
-    console.log("image")
     try {
       const url = await UploadImageByUrl(image);
-      console.log(url)
       return {
         success: 1,
         file: { url },
       };
     } catch (err) {
-      console.error("Error uploading image by file:", err.message);
       return { success: 0, message: err.message };
     }
   };
@@ -57,7 +54,7 @@ const EditorBox = () => {
       class: Image,
       config: {
         uploader: {
-          uploadByURL:  UploadImageByLink,
+          uploadByUrl: UploadImageByLink,
           uploadByFile: UploadImageByFile,
         },
       },
