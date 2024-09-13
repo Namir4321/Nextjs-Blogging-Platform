@@ -5,7 +5,7 @@ export const validateWithZodSchema = async (schema, data) => {
   const result = schema.safeParse(data);
   if (!result.success) {
     const errors = result.error.errors.map((error) => error.message);
-    throw new Error(errors.join(", ")||errors);
+    throw new Error(errors.join(", ") || errors);
   }
   return result.data;
 };
@@ -59,3 +59,25 @@ function validateFile() {
       );
     }, "File must be an image");
 }
+
+export const BlogSchema = z.object({
+  banner: z.string().url("Invalid URL format"),
+  content: z.object({
+    time: z.number().positive("Invalid timestamp"),
+    blocks: z
+      .array(z.any())
+      .min(2, { message: "There should be at least two Content" }),
+
+    version: z.string(),
+  }),
+  description: z
+    .string()
+    .max(255, "Description too long")
+    .min(10, "Description is too short"),
+  Tag: z
+    .array(z.string())
+    .min(4, "At least four tag required")
+    .max(10, "Too many tags"),
+  title: z.string().min(5, "Title is required").max(100, "Title too long"),
+  profileId: z.string().uuid("Please login in first to publish"),
+});

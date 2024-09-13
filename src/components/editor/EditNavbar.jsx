@@ -1,6 +1,10 @@
 import { ButtonProp } from "@/components/form/ButtonProp";
 import Navlogo from "@/components/Navbar/NavLogo";
 import EditButton from "@/components/editor/EditButton";
+import Preview from "@/components/preview/Preview";
+import Link from "next/link";
+import PreviewPage from "@/app/preview/page";
+
 
 const EditNavbar = () => {
   return (
@@ -10,7 +14,9 @@ const EditNavbar = () => {
           <Navlogo />
         </div>
         <div className="flex gap-4 items-center">
-          <EditButton />
+         
+           <Preview/>
+         
         </div>
       </div>
     </nav>

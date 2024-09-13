@@ -25,9 +25,8 @@ model Profile {
   profileImage String
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @default(now())
+  Blog         Blog[]
   Social_Links Social_Links[]
-  Account_Info Account_Info[]
-  Blogs        Blogs[]
 }
 
 model Social_Links {
@@ -42,20 +41,15 @@ model Social_Links {
   website   String
 }
 
-model Account_Info {
+model Blog {
   id          String  @id @default(uuid())
+  title       String
+  banner      String
+  description String
+  content     Json
   profile     Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId   String
-  total_post  String
-  total_reads Int     @default(0)
-  google_auth Boolean @default(false)
-  Blogs       Blogs[]
+  Tag         String[]
 }
 
-model Blogs {
-  id        String       @id @default(uuid())
-  profile   Profile      @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  profileId String
-  account   Account_Info @relation(fields: [AccountId], references: [id], onDelete: Cascade)
-  AccountId String
-}
+

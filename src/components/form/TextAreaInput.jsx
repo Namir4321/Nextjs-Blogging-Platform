@@ -6,9 +6,12 @@ const TextAreaInput = ({
   defaultValue,
   className,
   placeholder,
+  onChange,
+  disabled,
+  row,value
 }) => {
   return (
-    <div className="mb-2">
+    <div className=" mt-5">
       <Label htmlFor={name} className="capitalize">
         {labelText || name}
       </Label>
@@ -17,8 +20,11 @@ const TextAreaInput = ({
         name={name}
         placeholder={placeholder || name}
         defaultValue={defaultValue}
-        rows={3}
-        className={`leading-loose ${className}`}
+        value={value}
+        rows={row}
+        className={` leading-loose ${className} `}
+        onChange={onChange}
+        disabled={disabled}
       />
     </div>
   );

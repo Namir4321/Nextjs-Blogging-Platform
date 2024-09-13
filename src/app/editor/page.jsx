@@ -2,7 +2,7 @@ import EditorBanner from "@/components/editor/EditorBanner";
 const EditorPage = () => {
   return (
     <div>
-      <EditorBanner/>
+      <EditorBanner className="container"/>
     </div>
   )
 }

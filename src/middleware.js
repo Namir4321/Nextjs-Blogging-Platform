@@ -4,9 +4,11 @@ import {
   apiAuthPrefix,
   DEFAULT_LOGIN_REDIRECT,
 } from "./route";
-
+import {getAuthUser} from "@/utils/action"
 const middleware = async (req) => {
   const { nextUrl } = req;
+  const session=await getAuthUser();
+   const isLoggedIn = !!session;
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   
   const isPublicRoute = publicRoutes.some((route) =>
@@ -16,6 +18,15 @@ const middleware = async (req) => {
  if (isApiAuthRoute) {
    return null;
  }
+  if (isAuthRoute) {
+    if (isLoggedIn) {
+      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+    }
+    return null;
+  }
+   if (!isLoggedIn && !isPublicRoute) {
+     return Response.redirect(new URL("/signin", nextUrl));
+   }
   return null;
 };
 export const config = {
