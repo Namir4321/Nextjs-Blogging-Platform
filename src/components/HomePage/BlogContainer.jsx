@@ -1,8 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import BlogList from "@/components/HomePage/BlogList";
-import Loading from "@/components/HomePage/Loading";
-import { fetchBlogAction } from "@/utils/action";
+import { LoadingMainCard } from "@/components/HomePage/Loading";
+import { fetchBlogAction, fetchBlogWithFilterAction } from "@/utils/action";
+import { activeTabRef } from "@/components/InPageNavigation/InPageNavigation";
 
 const BlogContainer = ({ selectedTag }) => {
   const [blogs, setBlogs] = useState([]);
@@ -12,8 +13,15 @@ const BlogContainer = ({ selectedTag }) => {
     const fetchBlogs = async () => {
       setLoading(true);
       try {
-        const result = await fetchBlogAction(selectedTag); // Pass the selectedTag to filter blogs
-        setBlogs(result);
+        activeTabRef.current.click();
+        if (selectedTag === "home") {
+          const result = await fetchBlogAction();
+          setBlogs(result);
+        }
+        if (selectedTag !== "home") {
+          const result = await fetchBlogWithFilterAction(selectedTag);
+          setBlogs(result);
+        }
       } catch (error) {
         console.error("Error fetching blogs:", error);
       } finally {
@@ -22,17 +30,21 @@ const BlogContainer = ({ selectedTag }) => {
     };
 
     fetchBlogs();
-  }, [selectedTag]); 
+  }, [selectedTag]);
 
   if (loading) {
-    return <Loading />; 
+    return <LoadingMainCard />;
   }
 
   if (blogs.length === 0) {
-    return <h6>No blogs found for the selected category...</h6>; 
+    return (
+      <h6 className="flex items-center justify-center bg-gray-100 ">
+        No blogs published for the selected category...
+      </h6>
+    );
   }
 
-  return <BlogList blogs={blogs} />; 
+  return <BlogList blogs={blogs} />;
 };
 
 export default BlogContainer;

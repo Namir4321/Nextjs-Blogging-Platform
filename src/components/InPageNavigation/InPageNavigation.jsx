@@ -1,15 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-
+export let activeTabLinRef;
+export let activeTabRef;
 const InPageNavigation = ({
   children,
   routes,
   defaultActiveIndex = 0,
   defaultHidden = [],
 }) => {
-  let activeTabLinRef = useRef();
-  let activeTabRef = useRef();
+  activeTabLinRef = useRef();
+  activeTabRef = useRef();
   let [inPageNavIndex, setInPageNavIndex] = useState(defaultActiveIndex);
   const changePageState = (btn, i) => {
     let { offsetWidth, offsetLeft } = btn;

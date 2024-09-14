@@ -36,7 +36,7 @@ const BlogCard = ({ blog }) => {
           </p>
           <div className="flex gap-4 mt-7">
             <span className="btn-dark bg-gray-200 rounded-xl text-xs text-black py-1 px-4">
-              {Tag[0]}
+              {Tag[0].charAt(0).toUpperCase() + Tag[0].slice(1).toLowerCase()}
             </span>
             <span className="ml-3 flex items-center gap-2 text-gray-500">
               <MdFavoriteBorder />

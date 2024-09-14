@@ -114,3 +114,42 @@ export const fetchtrendingBlogAction = async () => {
     return { message: err.message };
   }
 };
+
+export const fetchBlogWithFilterAction = async (tagsearch) => {
+  try {
+    const filterBlog = await db.blog.findMany({
+      where: { Tag: { has: tagsearch } },
+      select: {
+        id: true,
+        title: true,
+        banner: true,
+        description: true,
+        content: true,
+        createdAt: true,
+        Tag: true,
+        profile: {
+          select: {
+            firstName: true,
+            lastName: true,
+            profileImage: true,
+            username: true,
+            id: true,
+          },
+        },
+      },
+    });
+    return filterBlog;
+  } catch (err) {
+    return { message: err.message };
+  }
+};
+export const totalBlogAction = async () => {
+  try {
+    const totalData = await db.blog.count({
+      where: { draft: false },
+    });
+    return totalData;
+  } catch (err) {
+    return { message: err.message };
+  }
+};

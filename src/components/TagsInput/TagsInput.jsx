@@ -10,7 +10,7 @@ const TagsInput = () => {
   const handleKeyDown = (e) => {
     if (e.code === "Enter" || e.code === "Comma") {
       e.preventDefault();
-      let tag = e.target.value;
+      let tag = e.target.value.toLowerCase();
       if (tags.length < 10) {
         handleAddTag(tag, dispatch);
       }else{

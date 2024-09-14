@@ -2,30 +2,40 @@
 import { Suspense, useState } from "react";
 import TrendingContainer from "./TrendingContainer";
 import { Button } from "../ui/button";
-import Loading from "@/components/HomePage/Loading";
-const category = ["finance", "tech", "Techonology", "car", "AI"];
+import { LoadingMainCard } from "@/components/HomePage/Loading";
+const category = ["finance", "tech", "Techonology", "car", "AI", "Travel"];
 
-const CategoryList = ({ setSelectedTag }) => {
+const CategoryList = ({ setSelectedTag, selectedTag }) => {
+  const [selectCategory, setSelectCategory] = useState(null);
   const handleBlogByCategory = (e) => {
     const tag = e.target.innerText.toLowerCase();
-    setSelectedTag(tag);
+    if (selectedTag !== tag) {
+      setSelectedTag(tag);
+      setSelectCategory(tag);
+    } else {
+      setSelectCategory("");
+      setSelectedTag("home");
+    }
   };
 
   return (
     <div className="flex gap-3 flex-wrap">
       {category.map((categories, i) => (
         <Button
-          className="p-3 bg-gray-200 rounded-full px-6 capitalize"
+          className={`p-3 rounded-full px-6 capitalize ${
+            selectCategory === categories.toLowerCase() ? "" : "bg-gray-200"
+          }`}
           key={i}
           onClick={handleBlogByCategory}
-          variant="ghost"
+          variant={
+            selectCategory === categories.toLocaleLowerCase()
+              ? "default"
+              : "ghost"
+          }
         >
           {categories}
         </Button>
       ))}
-      <Suspense fallback={<Loading />}>
-        <TrendingContainer />
-      </Suspense>
     </div>
   );
 };
