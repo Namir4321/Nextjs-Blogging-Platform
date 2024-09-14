@@ -36,7 +36,7 @@ const NavLink = async () => {
           <DropdownMenuSeparator />
           <DropdownMenuItem className="grid gap-1">
             <NavSignOut />
-            <h6 className="mx-1">{profile.username}</h6>
+            <h6 className="mx-1">{profile?.username}</h6>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

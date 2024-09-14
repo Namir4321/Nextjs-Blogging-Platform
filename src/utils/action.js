@@ -9,6 +9,7 @@ import {
 import { get } from "http";
 import { profile } from "console";
 import { redirect } from "next/navigation";
+import { comment } from "postcss";
 export const getAuthUser = async () => {
   const session = await auth();
   if (!session) return null;
@@ -53,6 +54,63 @@ export const createBlogAction = async (data) => {
     console.log(err);
     return { message: err.message };
   }
-  // return {message:"Bog Created"}
-  redirect("/")
+  redirect("/");
+};
+export const fetchBlogAction = async () => {
+  try {
+    const blogs = await db.blog.findMany({
+      take: 10,
+      select: {
+        id: true,
+        title: true,
+        banner: true,
+        description: true,
+        content: true,
+        createdAt: true,
+        Tag: true,
+        profile: {
+          select: {
+            firstName: true,
+            lastName: true,
+            profileImage: true,
+            username: true,
+            id: true,
+          },
+        },
+      },
+    });
+    return blogs;
+  } catch (err) {
+    console.log(err);
+    return { message: err.message };
+  }
+};
+export const fetchtrendingBlogAction = async () => {
+  try {
+    const trending = await db.blog.findMany({
+      orderBy: [
+        { like_count: "desc" },
+        { comment_count: "desc" },
+        { read_count: "desc" },
+      ],
+      take: 5,
+      select: {
+        id: true,
+        title: true,
+        createdAt: true,
+        profile: {
+          select: {
+            firstName: true,
+            lastName: true,
+            profileImage: true,
+            username: true,
+            id: true,
+          },
+        },
+      },
+    });
+    return trending;
+  } catch (err) {
+    return { message: err.message };
+  }
 };
