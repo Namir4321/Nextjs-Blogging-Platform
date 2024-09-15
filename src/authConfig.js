@@ -6,13 +6,14 @@ export const authConfig = {
   providers: [
     CredentailsProvider({
       async authorize(credentials) {
-        if (!credentials) return null;
         try {
+          if (!credentials) return null;
           const userSearch = await findUserByEmail(credentials.email);
-           const isMatch=credentials.password===userSearch.password;
-          if(isMatch) return userSearch
-          
-          return null;
+          if(!userSearch) return null
+          const isMatch = credentials.password === userSearch.password;
+          if (!isMatch) return null;
+
+          return userSearch;
         } catch (error) {
           return {
             message: error || "Something Went wrong",
