@@ -5,28 +5,37 @@ import BlogContainer from "@/components/HomePage/BlogContainer";
 import TrendingContainer from "@/components/HomePage/TrendingContainer";
 import TrendingBlock from "@/components/HomePage/TrendingBlock";
 import { Suspense, useState } from "react";
-
+import PaginationComp from "@/components/HomePage/PaginationComp";
+import { useSearchParams } from "next/navigation";
 const HomePage =  () => {
 const [selectedTag,setSelectedTag]=useState("home")
+const pageParams=useSearchParams();
+ const page = pageParams.get("page");
   return (
-    <section className=" h-cover flex justify-center gap-10">
-      <section className="container w-full">
-        <InPageNavigation
-          routes={[selectedTag, "trending blogs"]}
-          defaultHidden={["trending blogs"]}
-        >
-          <Suspense fallback={<LoadingMainCard />}>
-            <BlogContainer selectedTag={selectedTag} />
-          </Suspense>
-          <Suspense fallback={<LoadingMainCard />}>
-            <TrendingContainer />
-          </Suspense>
-        </InPageNavigation>
+    <>
+      <section className=" h-cover flex justify-center gap-10">
+        <section className="container w-full">
+          <InPageNavigation
+            routes={[selectedTag, "trending blogs"]}
+            defaultHidden={["trending blogs"]}
+          >
+            <Suspense fallback={<LoadingMainCard />}>
+              <BlogContainer selectedTag={selectedTag} />
+            </Suspense>
+            <Suspense fallback={<LoadingMainCard />}>
+              <TrendingContainer />
+            </Suspense>
+          </InPageNavigation>
+        </section>
+        <div className="min-w-[40%] lg:min-w-[400px] max-w-min border-1 border-gray-300  pt-3 max-md:hidden">
+          <TrendingBlock
+            selectedTag={selectedTag}
+            setSelectedTag={setSelectedTag}
+          />
+        </div>
       </section>
-      <div className="min-w-[40%] lg:min-w-[400px] max-w-min border-1 border-gray-300  pt-3 max-md:hidden">
-        <TrendingBlock selectedTag={selectedTag} setSelectedTag={setSelectedTag}/>
-      </div>
-    </section>
+      <PaginationComp page={page} selectedTag={selectedTag} />
+    </>
   );
 };
 

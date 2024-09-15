@@ -31,7 +31,22 @@ export const getProfileImage = async () => {
   });
   return profile || null;
 };
-
+export const totalBlogAction = async (tagsearch) => {
+  try {
+    const whereClause = { draft: false };
+    if (tagsearch !== "home") {
+      whereClause.Tag = { has: tagsearch };
+    }
+    console.log(whereClause);
+    const totalData = await db.blog.count({
+      where: whereClause,
+    });
+    console.log(totalData)
+    return totalData;
+  } catch (err) {
+    return { message: err.message };
+  }
+};
 export const BlogImageAction = async (prevState, formData) => {
   console.log("clicked");
   const image = formData.get("image");
@@ -56,10 +71,13 @@ export const createBlogAction = async (data) => {
   }
   redirect("/");
 };
-export const fetchBlogAction = async () => {
+export const fetchBlogAction = async (page) => {
   try {
+    const pagenum = page > 1 ? (page - 1) * 1 : 0;
+    console.log(pagenum);
     const blogs = await db.blog.findMany({
-      take: 10,
+      take: 5,
+      skip: pagenum,
       select: {
         id: true,
         title: true,
@@ -139,16 +157,6 @@ export const fetchBlogWithFilterAction = async (tagsearch) => {
       },
     });
     return filterBlog;
-  } catch (err) {
-    return { message: err.message };
-  }
-};
-export const totalBlogAction = async () => {
-  try {
-    const totalData = await db.blog.count({
-      where: { draft: false },
-    });
-    return totalData;
   } catch (err) {
     return { message: err.message };
   }

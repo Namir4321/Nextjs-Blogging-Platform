@@ -4,18 +4,20 @@ import BlogList from "@/components/HomePage/BlogList";
 import { LoadingMainCard } from "@/components/HomePage/Loading";
 import { fetchBlogAction, fetchBlogWithFilterAction } from "@/utils/action";
 import { activeTabRef } from "@/components/InPageNavigation/InPageNavigation";
+import { useSearchParams } from "next/navigation";
 
 const BlogContainer = ({ selectedTag }) => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const searchParams=useSearchParams();
+  const page=searchParams.get("page")
   useEffect(() => {
     const fetchBlogs = async () => {
       setLoading(true);
       try {
         activeTabRef.current.click();
         if (selectedTag === "home") {
-          const result = await fetchBlogAction();
+          const result = await fetchBlogAction(page);
           setBlogs(result);
         }
         if (selectedTag !== "home") {
