@@ -3,10 +3,13 @@ import { Suspense, useState } from "react";
 import TrendingContainer from "./TrendingContainer";
 import { Button } from "../ui/button";
 import { LoadingMainCard } from "@/components/HomePage/Loading";
+import { useSearchParams } from "next/navigation";
 const category = ["finance", "tech", "Techonology", "car", "AI", "Travel"];
 
 const CategoryList = ({ setSelectedTag, selectedTag }) => {
   const [selectCategory, setSelectCategory] = useState(null);
+  const pageParams = useSearchParams();
+  const search = pageParams.get("search");
   const handleBlogByCategory = (e) => {
     const tag = e.target.innerText.toLowerCase();
     if (selectedTag !== tag) {

@@ -9,19 +9,23 @@ import { useSearchParams } from "next/navigation";
 const BlogContainer = ({ selectedTag }) => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const searchParams=useSearchParams();
-  const page=searchParams.get("page")
+  const searchParams = useSearchParams();
+  const search = searchParams.get("search");
   useEffect(() => {
     const fetchBlogs = async () => {
       setLoading(true);
       try {
         activeTabRef.current.click();
         if (selectedTag === "home") {
-          const result = await fetchBlogAction(page);
+          const result = await fetchBlogAction();
           setBlogs(result);
         }
         if (selectedTag !== "home") {
           const result = await fetchBlogWithFilterAction(selectedTag);
+          setBlogs(result);
+        }
+        if (search) {
+          const result = await fetchBlogWithFilterAction(selectedTag, search);
           setBlogs(result);
         }
       } catch (error) {
@@ -32,8 +36,8 @@ const BlogContainer = ({ selectedTag }) => {
     };
 
     fetchBlogs();
-  }, [selectedTag]);
-
+  }, [selectedTag, search]);
+console.log(blogs)
   if (loading) {
     return <LoadingMainCard />;
   }

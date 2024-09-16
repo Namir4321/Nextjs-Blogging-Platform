@@ -4,10 +4,10 @@ export const LoadingCard = () => {
     <>
       <div className="flex items-center space-x-4 mb-2">
         <div className="space-y-2">
-          <Skeleton className="h-4 w-[660px]" />
-          <Skeleton className="h-4 w-[660px]" />
-          <Skeleton className="h-4 w-[660px]" />
-          <Skeleton className="h-4 w-[60px]" />
+          <Skeleton className="h-4 w-[220px] sm:w-[760px]" />
+          <Skeleton className="h-4 w-[220px] sm:w-[760px]" />
+          <Skeleton className="h-4 w-[220px] sm:w-[760px]" />
+          <Skeleton className="h-4 w-[30px] sm:w-[60px]" />
         </div>
         <Skeleton className="h-24 w-24 rounded" />
       </div>
@@ -21,7 +21,6 @@ export const LoadingMainCard = () => {
       <LoadingCard />
       <LoadingCard />
       <LoadingCard />
-      <LoadingCard />
     </>
   );
 };
@@ -30,9 +29,9 @@ export const LoadingTrendCard = () => {
     <div className="flex items-center space-x-4 mb-2">
       <Skeleton className="h-24 w-24 rounded" />
       <div className="space-y-2">
-        <Skeleton className="h-4 w-[220px]" />
-        <Skeleton className="h-4 w-[220px]" />
-        <Skeleton className="h-4 w-[220px]" />
+        <Skeleton className="h-4 w-[240px]" />
+        <Skeleton className="h-4 w-[240px]" />
+        <Skeleton className="h-4 w-[240px]" />
         <Skeleton className="h-4 w-[30px]" />
       </div>
     </div>

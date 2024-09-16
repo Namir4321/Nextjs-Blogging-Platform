@@ -41,7 +41,7 @@ export const totalBlogAction = async (tagsearch) => {
     const totalData = await db.blog.count({
       where: whereClause,
     });
-    console.log(totalData)
+    console.log(totalData);
     return totalData;
   } catch (err) {
     return { message: err.message };
@@ -71,13 +71,9 @@ export const createBlogAction = async (data) => {
   }
   redirect("/");
 };
-export const fetchBlogAction = async (page) => {
+export const fetchBlogAction = async () => {
   try {
-    const pagenum = page > 1 ? (page - 1) * 1 : 0;
-    console.log(pagenum);
     const blogs = await db.blog.findMany({
-      take: 5,
-      skip: pagenum,
       select: {
         id: true,
         title: true,
@@ -133,10 +129,16 @@ export const fetchtrendingBlogAction = async () => {
   }
 };
 
-export const fetchBlogWithFilterAction = async (tagsearch) => {
+export const fetchBlogWithFilterAction = async (tagsearch, search) => {
   try {
     const filterBlog = await db.blog.findMany({
-      where: { Tag: { has: tagsearch } },
+      where: {
+        OR: [
+          { Tag: { has: tagsearch } },
+          { title: { contains: search, mode: "insensitive" } },
+          { description: { contains: search, mode: "insensitive" } },
+        ],
+      },
       select: {
         id: true,
         title: true,
@@ -157,6 +159,27 @@ export const fetchBlogWithFilterAction = async (tagsearch) => {
       },
     });
     return filterBlog;
+  } catch (err) {
+    return { message: err.message };
+  }
+};
+export const fetchUserAction = async (username) => {
+  try {
+    const fetchUser = await db.profile.findMany({
+      where: {
+        username: {
+          contains:username,
+          mode:"insensitive",
+        },
+      },
+      select: {
+        firstName: true,
+        lastName: true,
+        username: true,
+        profileImage: true,
+      },
+    });
+    return fetchUser;
   } catch (err) {
     return { message: err.message };
   }
