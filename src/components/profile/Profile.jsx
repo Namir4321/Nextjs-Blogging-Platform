@@ -1,4 +1,8 @@
-import { fetchProfile, fetchUserAction, getBlogfromUserId } from "@/utils/action";
+import {
+  fetchProfile,
+  fetchUserAction,
+  getBlogfromUserId,
+} from "@/utils/action";
 import { Suspense } from "react";
 import { LoadingCard, LoadingMainCard } from "../HomePage/Loading";
 import Accountdetails from "@/components/profile/Accountdetails";
@@ -22,7 +26,9 @@ const Profile = async ({ profileId }) => {
           >
             <Suspense fallback={<LoadingMainCard />}>
               {blogs.length > 0 ? (
-                <BlogList blogs={blogs} />
+                <div className="container">
+                  <BlogList blogs={blogs} />
+                </div>
               ) : (
                 <p className="container bg-gray-100">No blogs yet</p>
               )}
