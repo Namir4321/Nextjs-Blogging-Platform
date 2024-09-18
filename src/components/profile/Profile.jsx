@@ -26,7 +26,7 @@ const Profile = async ({ profileId }) => {
           >
             <Suspense fallback={<LoadingMainCard />}>
               {blogs.length > 0 ? (
-                <div className="container" key={id}>
+                <div className="container" key={"id"}>
                   <BlogList blogs={blogs} />
                 </div>
               ) : (
