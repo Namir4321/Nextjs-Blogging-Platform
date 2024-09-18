@@ -37,7 +37,7 @@ const BlogContainer = ({ selectedTag }) => {
 
     fetchBlogs();
   }, [selectedTag, search]);
-console.log(blogs)
+
   if (loading) {
     return <LoadingMainCard />;
   }

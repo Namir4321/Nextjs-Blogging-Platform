@@ -46,7 +46,6 @@ const HomePage = () => {
           {search && <UserBlock search={search} />}
         </div>
       </section>
-      {/* <PaginationComp page={page} selectedTag={selectedTag} /> */}
     </>
   );
 };

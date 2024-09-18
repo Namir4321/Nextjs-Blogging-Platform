@@ -10,6 +10,7 @@ import { get } from "http";
 import { profile } from "console";
 import { redirect } from "next/navigation";
 import { comment } from "postcss";
+import github from "next-auth/providers/github";
 export const getAuthUser = async () => {
   const session = await auth();
   if (!session) return null;
@@ -168,11 +169,12 @@ export const fetchUserAction = async (username) => {
     const fetchUser = await db.profile.findMany({
       where: {
         username: {
-          contains:username,
-          mode:"insensitive",
+          contains: username,
+          mode: "insensitive",
         },
       },
       select: {
+        id: true,
         firstName: true,
         lastName: true,
         username: true,
@@ -180,6 +182,93 @@ export const fetchUserAction = async (username) => {
       },
     });
     return fetchUser;
+  } catch (err) {
+    return { message: err.message };
+  }
+};
+
+export const fetchProfile = async (username) => {
+  try {
+    const profile = await db.profile.findUnique({
+      where: { username },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        username: true,
+        createdAt: true,
+        profileImage: true,
+        bio: true,
+        Social_Links: {
+          select: {
+            youtube: true,
+            instagram: true,
+            facebook: true,
+            twitter: true,
+            github: true,
+            website: true,
+          },
+        },
+        Blog: {
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            like_count: true,
+            read_count: true,
+          },
+        },
+      },
+    });
+    return profile;
+  } catch (err) {
+    console.log(err);
+  }
+};
+export const getBlogfromUserId = async (userId) => {
+  try {
+    console.log(userId);
+    const blogs = await db.blog.findMany({
+      where: {
+        profileId: userId,
+      },
+      select: {
+        id: true,
+        title: true,
+        banner: true,
+        description: true,
+        content: true,
+        createdAt: true,
+        Tag: true,
+        profile: {
+          select: {
+            firstName: true,
+            lastName: true,
+            profileImage: true,
+            username: true,
+            id: true,
+          },
+        },
+      },
+    });
+    return blogs;
+  } catch (err) {}
+};
+export const getProfileFromUserId = async (userId) => {
+  try {
+    const profile = await db.profile.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        firstName: true,
+        lastName: true,
+        profileImage: true,
+        username: true,
+        id: true,
+      },
+    });
+    return profile;
   } catch (err) {
     return { message: err.message };
   }

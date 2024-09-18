@@ -1,6 +1,6 @@
 export const formatDate=(date,onlyMonth)=>{
 const options={
-    // year:"numeric",
+    year:"numeric",
     month:"long"
 }
 if(!onlyMonth){

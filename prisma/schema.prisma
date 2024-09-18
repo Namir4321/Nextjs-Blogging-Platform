@@ -30,6 +30,7 @@ model Profile {
   Activity     Activity[]
 }
 
+
 model Social_Links {
   id        String  @id @default(uuid())
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
@@ -61,9 +62,10 @@ model Blog {
 }
 
 model Activity {
-  id        String  @id @default(uuid())
-  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  profileId String
-  blog      Blog    @relation(fields: [blogId], references: [id], onDelete: Cascade)
-  blogId    String
+  id            String  @id @default(uuid())
+  profile       Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId     String
+  blog          Blog    @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  blogId        String
 }
+

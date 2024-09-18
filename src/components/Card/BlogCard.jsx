@@ -7,7 +7,7 @@ import { MdFavoriteBorder } from "react-icons/md";
 const BlogCard = ({ blog }) => {
   const { title, banner, description, createdAt, id, Tag } = blog;
   const { firstName, lastName, profileImage, username } = blog.profile;
-  //   console.log(createdAt)
+ 
   return (
     <article>
       <Link

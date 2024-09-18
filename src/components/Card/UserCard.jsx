@@ -5,7 +5,7 @@ const UserCard = ({ user }) => {
   const { firstName, lastName, profileImage, username } = user;
   return (
     <div>
-      <Link href={`/user/${username}`} className="">
+      <Link href={`/profile/${username}`} className="">
         <div className="flex gap-5 items-center mb-5">
           <Image
             src={profileImage}
