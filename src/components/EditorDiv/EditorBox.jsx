@@ -4,10 +4,10 @@ import { TOOLS } from "@/utils/EditorTools";
 import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { updateContent } from "@/redux/Blogslice";
-const EditorBox = ({defaultValue,id}) => {
+const EditorBox = ({defaultValue,id,readOnly}) => {
   const dispatch = useDispatch();
   const ref = useRef(null);
-  
+  console.log(defaultValue)
 
   useEffect(() => {
     if (!ref.current) {
@@ -16,6 +16,7 @@ const EditorBox = ({defaultValue,id}) => {
         placeholder: "Let's write an awesome story!....",
         data: defaultValue || {},
         tools: TOOLS,
+        readOnly:readOnly||false,
         async onChange(api, event) {
           const content = await api.saver.save();
           const safeContent = JSON.parse(JSON.stringify(content));
@@ -35,7 +36,7 @@ const EditorBox = ({defaultValue,id}) => {
 
   return (
     <>
-      <div id={id} className="w-full "></div>
+      <div id={id} className="w-full"></div>
     </>
   );
 };

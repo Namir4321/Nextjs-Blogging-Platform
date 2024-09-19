@@ -124,3 +124,9 @@ h6 {
   max-width:780px;
     margin-top:20px;
 }
+.cdx-input {
+  display:none
+}
+.image-tool__caption{
+  display:none
+}

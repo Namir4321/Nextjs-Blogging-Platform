@@ -15,7 +15,19 @@ import InlineCode from "@editorjs/inline-code";
 import SimpleImage from "@editorjs/simple-image";
 import { UploadImage, UploadImageByUrl } from "@/utils/supabase";
 import { imageSchema, validateWithZodSchema } from "./FormValidation";
- const UploadImageByLink = async (image) => {
+import { Caption } from "react-day-picker";
+export default class CustomEditorJSEmbed extends Embed {
+  render() {
+    this.element = Embed.prototype.render.call(this);
+
+    if (this.readOnly && !this.data.caption) {
+      this.element.removeChild(this.element.lastChild);
+    }
+
+    return this.element;
+  }
+}
+const UploadImageByLink = async (image) => {
     try {
       const url = await UploadImageByUrl(image);
       return {
@@ -42,7 +54,16 @@ import { imageSchema, validateWithZodSchema } from "./FormValidation";
       }
     };
 export const TOOLS = {
-  embed: Embed,
+  embed: {
+    class: CustomEditorJSEmbed, // Use the custom embed class
+    config: {
+      services: {
+        // Specify your supported embed services, e.g. YouTube, Instagram, etc.
+        youtube: true,
+        instagram: true,
+      },
+    },
+  },
   table: Table,
   marker: Marker,
   list: List,
@@ -53,10 +74,11 @@ export const TOOLS = {
     class: Image,
     config: {
       uploader: {
-        uploadByUrl:UploadImageByLink,
+        uploadByUrl: UploadImageByLink,
         uploadByFile: UploadImageByFile,
       },
     },
+    caption: false,
   },
   raw: Raw,
   header: {

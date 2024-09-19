@@ -273,3 +273,96 @@ export const getProfileFromUserId = async (userId) => {
     return { message: err.message };
   }
 };
+export const updateReadCount = async (blogId) => {
+  try {
+    const userId = await getAuthUser();
+    const blog = await db.blog.update({
+      where: { id: blogId },
+      data: { read_count: { increment: 1 } },
+      select: { profileId: true },
+    });
+    if (blog.profileId !== userId) {
+      await db.profile.update({
+        where: { id: blog.profileId },
+        data: { totalread: { increment: 1 } },
+      });
+    }
+  } catch (err) {
+    return { message: err.message };
+  }
+};
+export const fetchSingleBlogPost = async (blogId) => {
+  try {
+    const blog = await db.blog.findUnique({
+      where: { id: blogId },
+      select: {
+        id: true,
+        title: true,
+        banner: true,
+        description: true,
+        content: true,
+        createdAt: true,
+        Tag: true,
+        profile: {
+          select: {
+            firstName: true,
+            lastName: true,
+            profileImage: true,
+            username: true,
+            id: true,
+          },
+        },
+      },
+    });
+    return blog;
+  } catch (err) {
+    console.log(err);
+  }
+};
+export const fetchSimillarBlog = async (tagsearch, title, description,blogId) => {
+  try {
+    const filterBlog = await db.blog.findMany({
+      take: 2,
+      where: {
+        AND: [
+          {
+            id: { not: blogId },
+          },
+          {
+            OR: [
+              { Tag: { has: tagsearch[0] } },
+              { title: { contains: title, mode: "insensitive" } },
+              {
+                description: {
+                  contains: description,
+                  mode: "insensitive",
+                },
+              },
+            ],
+          },
+        ],
+      },
+      select: {
+        id: true,
+        title: true,
+        banner: true,
+        description: true,
+        content: true,
+        createdAt: true,
+        Tag: true,
+        profile: {
+          select: {
+            firstName: true,
+            lastName: true,
+            profileImage: true,
+            username: true,
+            id: true,
+          },
+        },
+      },
+    });
+    return filterBlog;
+  } catch (err) {
+    return { message: err.message };
+  }
+};

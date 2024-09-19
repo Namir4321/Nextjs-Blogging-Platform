@@ -8,7 +8,6 @@ import {
   updateBanner,
   resetState,
 } from "@/redux/Blogslice";
-import { useSelector } from "react-redux";
 
 export const handleTitleChange = (e, dispatch) => {
   console.log(e.target.value)

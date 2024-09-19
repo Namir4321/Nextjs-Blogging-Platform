@@ -23,13 +23,13 @@ model Profile {
   bio          String         @default("")
   password     String
   profileImage String
+  totalread    Int            @default(0)
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @default(now())
   Blog         Blog[]
   Social_Links Social_Links[]
   Activity     Activity[]
 }
-
 
 model Social_Links {
   id        String  @id @default(uuid())
@@ -62,10 +62,9 @@ model Blog {
 }
 
 model Activity {
-  id            String  @id @default(uuid())
-  profile       Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  profileId     String
-  blog          Blog    @relation(fields: [blogId], references: [id], onDelete: Cascade)
-  blogId        String
+  id        String  @id @default(uuid())
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String
+  blog      Blog    @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  blogId    String
 }
-
