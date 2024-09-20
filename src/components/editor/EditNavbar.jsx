@@ -6,7 +6,7 @@ import Link from "next/link";
 import PreviewPage from "@/app/preview/page";
 
 
-const EditNavbar = () => {
+const EditNavbar = ({blog}) => {
   return (
     <nav className="border-b ">
       <div className="container flex justify-between">
@@ -15,7 +15,7 @@ const EditNavbar = () => {
         </div>
         <div className="flex gap-4 items-center">
          
-           <Preview/>
+           <Preview blog={blog}/>
          
         </div>
       </div>

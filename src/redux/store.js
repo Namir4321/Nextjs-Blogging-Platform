@@ -11,6 +11,7 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
+import Updateslice from "./Updateslice";
 const createNoopStorage = () => {
    return {
      getItem(_key) {
@@ -37,6 +38,7 @@ const rootReducer = persistReducer(
   persistConfig,
   combineReducers({
     blogReducer: blogSlice,
+    updateReducer:Updateslice,
   })
 );
 export const store = configureStore({

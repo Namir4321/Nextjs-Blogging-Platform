@@ -1,14 +1,17 @@
 "use client";
-import { handleRemoveTag, handleEditTag } from "@/utils/reduxHelper";
+import { handleRemoveTag, handleEditTag, handleRemoveTagEdit, handleEditTagEdit } from "@/utils/reduxHelper";
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-const TagsComponent = ({ tag }) => {
+const TagsComponent = ({ tag,blog }) => {
   const [oldTag, setOldTag] = useState(tag);
   const dispatch = useDispatch();
   const handleTag = () => {
     handleRemoveTag(tag, dispatch);
+    if(blog){
+      handleRemoveTagEdit(tag, dispatch);
+    }
   };
   const handleTargetEdit = (e) => {
     if (e.code === "Enter" || e.code === "Comma") {
@@ -16,6 +19,9 @@ const TagsComponent = ({ tag }) => {
       let newTag = e.target.innerText;
       if (newTag && newTag !== oldTag) {
         handleEditTag(oldTag, newTag, dispatch);
+        if(blog){
+          handleEditTagEdit((oldTag, newTag, dispatch));
+        }
       }
       e.target.setAttribute("contentEditable", false);
     }

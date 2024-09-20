@@ -11,6 +11,7 @@ import { profile } from "console";
 import { redirect } from "next/navigation";
 import { comment } from "postcss";
 import github from "next-auth/providers/github";
+import { revalidatePath } from "next/cache";
 export const getAuthUser = async () => {
   const session = await auth();
   if (!session) return null;
@@ -302,6 +303,7 @@ export const fetchSingleBlogPost = async (blogId) => {
         description: true,
         content: true,
         createdAt: true,
+        like_count:true,
         Tag: true,
         profile: {
           select: {
@@ -319,7 +321,12 @@ export const fetchSingleBlogPost = async (blogId) => {
     console.log(err);
   }
 };
-export const fetchSimillarBlog = async (tagsearch, title, description,blogId) => {
+export const fetchSimillarBlog = async (
+  tagsearch,
+  title,
+  description,
+  blogId
+) => {
   try {
     const filterBlog = await db.blog.findMany({
       take: 2,
@@ -363,6 +370,75 @@ export const fetchSimillarBlog = async (tagsearch, title, description,blogId) =>
     });
     return filterBlog;
   } catch (err) {
+    return { message: err.message };
+  }
+};
+export const EditBlogAction = async (data, Blog) => {
+  try {
+    const UserId = await getAuthUser();
+    await db.blog.update({
+      where: {
+        id: Blog,
+        profileId: UserId,
+      },
+      data: {
+        banner: data.banner,
+        content: data.content,
+        description: data.description,
+        Tag: data.Tag,
+        title: data.title,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return { message: err.message };
+  }
+  redirect("/");
+};
+export const fetchFavouriteId = async ({ blogId }) => {
+  const userId = await getAuthUser();
+  const favourite = await db.favourite.findFirst({
+    where: {
+      blogId,
+      profileId: userId,
+    },
+    select: {
+      id: true,
+    },
+  });
+  return favourite?.id || null;
+};
+export const toggleFavouriteAction = async ({
+  blogId,
+  favouriteId,
+  pathname,
+}) => {
+  const user = await getAuthUser();
+  try {
+    if (favouriteId) {
+      await db.favourite.delete({
+        where: { id:favouriteId },
+      });
+      await db.blog.update({
+        where: { id: blogId },
+        data: { like_count: { increment: -1 } },
+      });
+    }else{
+    await db.favourite.create({
+      data:{
+        blogId,
+        profileId:user,
+      }
+    })
+     await db.blog.update({
+       where: { id: blogId },
+       data: { like_count: { increment: 1 } },
+     });
+    }
+    revalidatePath(pathname);
+    return {message:favouriteId?"You unlike a blog":"you liked a blog"}
+  } catch (err) {
+    console.log(err)
     return { message: err.message };
   }
 };

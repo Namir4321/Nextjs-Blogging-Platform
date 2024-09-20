@@ -9,11 +9,15 @@ import { BlogImageAction } from "@/utils/action";
 import { Input } from "../ui/input";
 import { UploadImage } from "@/utils/supabase";
 import { imageSchema, validateWithZodSchema } from "@/utils/FormValidation";
-import { handleUpdateBanner } from "@/utils/reduxHelper";
+import {
+  handleUpdateBanner,
+  handleUpdateBannerEdit,
+} from "@/utils/reduxHelper";
 import { useDispatch, useSelector } from "react-redux";
 
-const BlogImageContainer = () => {
+const BlogImageContainer = ({ defaultValue }) => {
   const image = useSelector((state) => state.blogReducer.banner);
+  const updateImage = useSelector((state) => state.updateReducer.banner);
   const imageUrl =
     "https://tizqinoyhtxjnpdbotyk.supabase.co/storage/v1/object/public/hotel-booking-images/blog%20banner.png";
 
@@ -23,8 +27,13 @@ const BlogImageContainer = () => {
     if (!image) return null;
     const validateFields = await validateWithZodSchema(imageSchema, { image });
     const fullpath = await UploadImage(validateFields.image);
-    handleUpdateBanner(fullpath, dispatch);
+    if (defaultValue) {
+      handleUpdateBannerEdit(fullpath, dispatch);
+    } else {
+      handleUpdateBanner(fullpath, dispatch);
+    }
   };
+  const imagesrc = defaultValue ? updateImage : image ? image : imageUrl;
   return (
     <div className="mx-auto container">
       <div
@@ -33,7 +42,7 @@ const BlogImageContainer = () => {
       >
         <FormContainer action={BlogImageAction}>
           <Label htmlFor="uploadBanner">
-            <Image src={image || imageUrl} alt="" fill objectFit="cover" />
+            <Image src={imagesrc} alt="" fill objectFit="cover" />
             <Input
               type="file"
               accept="image/*"

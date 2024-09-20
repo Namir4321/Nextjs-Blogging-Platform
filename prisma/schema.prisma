@@ -29,6 +29,7 @@ model Profile {
   Blog         Blog[]
   Social_Links Social_Links[]
   Activity     Activity[]
+  Favourite    Favourite[]
 }
 
 model Social_Links {
@@ -44,21 +45,22 @@ model Social_Links {
 }
 
 model Blog {
-  id            String     @id @default(uuid())
+  id            String      @id @default(uuid())
   title         String
   banner        String
   description   String
   content       Json
-  profile       Profile    @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profile       Profile     @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId     String
   Tag           String[]
-  like_count    Int        @default(0)
-  comment_count Int        @default(0)
-  read_count    Int        @default(0)
-  draft         Boolean    @default(false)
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @default(now())
+  like_count    Int         @default(0)
+  comment_count Int         @default(0)
+  read_count    Int         @default(0)
+  draft         Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now())
   Activity      Activity[]
+  Favourite     Favourite[]
 }
 
 model Activity {
@@ -66,5 +68,15 @@ model Activity {
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId String
   blog      Blog    @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  blogId    String
+}
+
+model Favourite {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String
+  blog      Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
   blogId    String
 }

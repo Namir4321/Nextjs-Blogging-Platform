@@ -8,7 +8,8 @@ const TextAreaInput = ({
   placeholder,
   onChange,
   disabled,
-  row,value
+  row,
+  value
 }) => {
   return (
     <div className=" mt-5">

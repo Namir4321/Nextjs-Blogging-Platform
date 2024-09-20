@@ -1,12 +1,27 @@
 "use client";
 import TextAreaInput from "@/components/form/TextAreaInput";
 import { useDispatch } from "react-redux";
-import { handleDescChange } from "@/utils/reduxHelper";
+import { handleDescChange, handleDescChangeEdit } from "@/utils/reduxHelper";
 import { useSelector } from "react-redux";
 
-const DescriptionInput = ({className,labelText,title,row}) => {
+const DescriptionInput = ({
+  className,
+  labelText,
+  title,
+  row,
+  updateValue,
+}) => {
   const dispatch = useDispatch();
-  const defaultValue = useSelector((state) => state.blogReducer.des);
+  const defaultValue = useSelector((state) => state.blogReducer.description);
+  const updateDescription = useSelector(
+    (state) => state.updateReducer.description
+  );
+
+  const descriptionValue = updateValue
+    ? updateDescription
+    : defaultValue
+    ? defaultValue
+    : "";
   return (
     <div className="rounded mt-3">
       <p>Short Descrption about your blog</p>
@@ -15,10 +30,14 @@ const DescriptionInput = ({className,labelText,title,row}) => {
           labelText={labelText}
           name={title}
           row={row}
-          defaultValue={defaultValue}
+          defaultValue={descriptionValue}
           placeholder="this is a short descrption"
           className={`focus-visible:ring-none outline-none border-none ${className}`}
-          onChange={(e) => handleDescChange(e, dispatch)}
+          onChange={(e) =>
+            updateValue
+              ? handleDescChangeEdit(e, dispatch)
+              : handleDescChange(e, dispatch)
+          }
         />
       </div>
     </div>

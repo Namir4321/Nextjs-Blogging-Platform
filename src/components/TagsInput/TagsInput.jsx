@@ -1,23 +1,28 @@
 "use client";
 import FormInput from "@/components/form/FormInput";
 import TagsComponent from "@/components/TagsInput/TagsComponent";
-import { handleAddTag } from "@/utils/reduxHelper";
+import { handleAddTag, handleAddTagEdit } from "@/utils/reduxHelper";
 import { useDispatch, useSelector } from "react-redux";
-const TagsInput = () => {
+const TagsInput = ({ updateValue, blog }) => {
   const tags = useSelector((state) => state.blogReducer.Tag);
-
+  const updatedtags = useSelector((state) => state.updateReducer.Tag);
   const dispatch = useDispatch();
+  const TagValue = updateValue ? updatedtags : tags ? tags : "";
+
   const handleKeyDown = (e) => {
     if (e.code === "Enter" || e.code === "Comma") {
       e.preventDefault();
       let tag = e.target.value.toLowerCase();
-      if (tags.length < 10) {
+      if (TagValue.length < 10) {
         handleAddTag(tag, dispatch);
-      }else{
-        return{message:"you can add max 10 tags"}
+        if (blog) {
+          handleAddTagEdit(tag, dispatch);
+        }
+      } else {
+        return { message: "you can add max 10 TagValue" };
       }
 
-      e.target.value=""
+      e.target.value = "";
     }
   };
   return (
@@ -33,9 +38,8 @@ const TagsInput = () => {
           className="sticky input-box bg-white top-0 left-0 pl-4 mb-3 focus:bg-white"
         />
 
-        {tags.map((tag, i) => {
-        
-          return <TagsComponent tag={tag} key={i} />;
+        {TagValue.map((tag, i) => {
+          return <TagsComponent tag={tag} key={i} blog={blog} />;
         })}
       </div>
     </div>
