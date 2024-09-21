@@ -3,7 +3,7 @@ import ShareButton from "@/components/BlogView/ShareButton";
 import FavouriteToggleButton from "@/components/Card/FavouriteToggleButton";
 import { getAuthUser } from "@/utils/action";
 import EditblogButton from "@/components/BlogView/EditblogButton";
-import CommentBox from "@/components/BlogView/CommentBox";
+import Comment from "@/components/comment/Comment";
 const BlogInteraction = async ({ blog }) => {
   const userId = await getAuthUser();
   return (
@@ -21,7 +21,7 @@ const BlogInteraction = async ({ blog }) => {
           </div>
           <div className="flex gap-3 items-center">
            
-            <CommentBox blog={blog}/>
+            <Comment blog={blog}/>
             <span>{blog.comment_count}</span>
           </div>
         </div>

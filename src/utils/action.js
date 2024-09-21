@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import db from "@/utils/db";
 import {
   BlogSchema,
+  commentSchema,
   imageSchema,
   validateWithZodSchema,
 } from "./FormValidation";
@@ -303,7 +304,8 @@ export const fetchSingleBlogPost = async (blogId) => {
         description: true,
         content: true,
         createdAt: true,
-        like_count:true,
+        like_count: true,
+        comment_count:true,
         Tag: true,
         profile: {
           select: {
@@ -417,26 +419,48 @@ export const toggleFavouriteAction = async ({
   try {
     if (favouriteId) {
       await db.favourite.delete({
-        where: { id:favouriteId },
+        where: { id: favouriteId },
       });
       await db.blog.update({
         where: { id: blogId },
         data: { like_count: { increment: -1 } },
       });
-    }else{
-    await db.favourite.create({
-      data:{
-        blogId,
-        profileId:user,
-      }
-    })
-     await db.blog.update({
-       where: { id: blogId },
-       data: { like_count: { increment: 1 } },
-     });
+    } else {
+      await db.favourite.create({
+        data: {
+          blogId,
+          profileId: user,
+        },
+      });
+      await db.blog.update({
+        where: { id: blogId },
+        data: { like_count: { increment: 1 } },
+      });
     }
     revalidatePath(pathname);
-    return {message:favouriteId?"You unlike a blog":"you liked a blog"}
+    return { message: favouriteId ? "You unlike a blog" : "you liked a blog" };
+  } catch (err) {
+    console.log(err);
+    return { message: err.message };
+  }
+};
+export const AddCommentAction = async (prevState, formData) => {
+  try {
+    const profileId = await getAuthUser();
+    const rawData = Object.fromEntries(formData);
+    rawData.replyingto = rawData.replyingto === "true";
+    const data = { ...rawData, profileId };
+    const validateFields = await validateWithZodSchema(commentSchema, data);
+    await db.comment.create({
+      data:validateFields
+    })
+     await db.blog.update({
+       where: { id: validateFields.blogId },
+       data: { comment_count: { increment: 1 } },
+       select: { profileId: true },
+     });
+    revalidatePath(`/blog/${validateFields.blogId}`)
+    return {message:"comment posted"}
   } catch (err) {
     console.log(err)
     return { message: err.message };

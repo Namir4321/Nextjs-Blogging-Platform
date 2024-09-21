@@ -81,3 +81,9 @@ export const BlogSchema = z.object({
   title: z.string().min(5, "Title is required").max(100, "Title too long"),
   profileId: z.string().uuid("Please login in first to publish"),
 });
+export const commentSchema = z.object({
+  comment: z.string().min(2, "write something to leave a comment"),
+  profileId: z.string().uuid("Please login in first to publish"),
+  blogId: z.string().uuid("Please login in first to publish"),
+  replyingto: z.boolean(),
+});

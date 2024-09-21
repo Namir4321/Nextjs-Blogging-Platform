@@ -30,6 +30,7 @@ model Profile {
   Social_Links Social_Links[]
   Activity     Activity[]
   Favourite    Favourite[]
+  Comment      Comment[]
 }
 
 model Social_Links {
@@ -61,6 +62,7 @@ model Blog {
   updatedAt     DateTime    @default(now())
   Activity      Activity[]
   Favourite     Favourite[]
+  Comment       Comment[]
 }
 
 model Activity {
@@ -79,4 +81,15 @@ model Favourite {
   profileId String
   blog      Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
   blogId    String
+}
+
+model Comment {
+  id         String   @id @default(uuid())
+  blog       Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  blogId     String
+  comment    String
+  replyingto Boolean  @default(false)
+  profile    Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId  String
+  children   String[]
 }
