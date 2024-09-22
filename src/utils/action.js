@@ -459,7 +459,7 @@ export const AddCommentAction = async (prevState, formData) => {
       data: { comment_count: { increment: 1 } },
       select: { profileId: true },
     });
-    revalidatePath(`/blog/${validateFields.blogId}`);
+    revalidatePath(`/blog/${rawData.blogId}`);
     return { message: "comment posted" };
   } catch (err) {
     console.log(err);
@@ -502,7 +502,6 @@ export const postCommentReply = async (prevState, formData) => {
     rawData.replyingto = rawData.replyingto === "true";
     const data = { ...rawData, profileId };
     const validateFields = await validateWithZodSchema(commentSchema, data);
-
     await db.comment.update({
       where: { id: rawData.parentId },
       data: {
@@ -516,20 +515,52 @@ export const postCommentReply = async (prevState, formData) => {
         },
       },
     });
+     revalidatePath(`/blog/${validateFields.blogId}`);
   } catch (err) {
     console.log(err);
     return { message: err.message };
   }
+ 
 };
-export const fetchCommentReply = async (commentId) => {
+export const fetchCommentReply = async (commentId, take, skip) => {
   try {
-    const comment=await db.comment.findMany({
+    const comment = await db.comment.findMany({
+      take: take,
+      skip: skip,
+      orderBy: [{ createdAt: "desc" }],
       where: {
         parentId: commentId,
         replyingto: true,
       },
+      select: {
+        id: true,
+        comment: true,
+        createdAt: true,
+        updatedAt: true,
+        profile: {
+          select: {
+            firstName: true,
+            lastName: true,
+            profileImage: true,
+            username: true,
+          },
+        },
+      },
     });
-    return comment
+    return comment;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const postDeleteReply = async (id) => {
+  try {
+    console.log(id)
+    await db.comment.delete({
+      where:{
+        id:id
+      }
+    })
   } catch (err) {
     console.log(err);
   }

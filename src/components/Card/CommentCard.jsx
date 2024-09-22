@@ -3,7 +3,9 @@ import Image from "next/image";
 import ReplyCard from "@/components/Card/ReplyCard";
 import CommentReply from "@/components/comment/CommentReply";
 import CommentReplyRender from "@/components/comment/CommentReplyRender";
+import { useState } from "react";
 const CommentCard = ({ comment }) => {
+  const [show, setISshow] = useState(false);
   return (
     <div className="w-full">
       <div className="my-5 p-6 rounded-md border-gray-100">
@@ -22,8 +24,12 @@ const CommentCard = ({ comment }) => {
           <p className="min-w-fit">{formatDate(comment.profile.createdAt)}</p>
         </div>
         <p className="font-sans text-xl ml-3">{comment.comment}</p>
-        <CommentReply comment={comment} key={comment.id} />
-        <CommentReplyRender key={comment.id} />
+        <CommentReply
+          comment={comment}
+          key={comment.id}
+          setISshow={setISshow}
+        />
+        {show && <CommentReplyRender commentId={comment.id} />}
       </div>
     </div>
   );

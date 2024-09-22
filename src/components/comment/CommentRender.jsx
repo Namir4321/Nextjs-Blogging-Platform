@@ -36,12 +36,9 @@ const CommentRender = ({ blogId }) => {
     return <div className="mt-5">No comments</div>;
   }
   return (
-    <div
-      className="mt-3 max-h-[300px] overflow-y-auto no-scrollbar"
-      key={comment}
-    >
-      {comments.map((comment,index) => (
-        <CommentCard key={`${comment.id}-${index}`} comment={comment} />
+    <div className="mt-3 max-h-[300px] overflow-y-auto no-scrollbar" key={comment}>
+      {comments.map((comment) => (
+        <CommentCard key={comment.id} comment={comment} />
       ))}
       {loading ? (
         <div>Loading...</div>

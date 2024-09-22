@@ -2,20 +2,48 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import TextAreaInput from "@/components/form/TextAreaInput";
 import FormContainer from "@/components/form/FormContainer";
-import { postCommentReply } from "@/utils/action";
+import { postCommentReply, postDeleteReply } from "@/utils/action";
 import { ButtonProp } from "@/components/form/ButtonProp";
-
-const CommentReply = ({comment}) => {
+import { FaRegCommentDots } from "react-icons/fa";
+import { MdOutlineDelete } from "react-icons/md";
+const CommentReply = ({ comment, setISshow }) => {
   const [show, setShow] = useState(false);
+  const handleDeleteComment = async (Id) => {
+    const deletepost = await postDeleteReply(Id);
+  };
   return (
     <div className="">
-      <Button
-        variant="ghost"
-        className=" underline"
-        onClick={() => setShow((prevState) => !prevState)}
-      >
-        Reply
-      </Button>
+      <div className="flex  justify-between">
+        <div>
+          <Button
+            type="button"
+            variant="ghost"
+            className="text-muted-foreground"
+            onClick={() => setISshow((prevState) => !prevState)}
+          >
+            <FaRegCommentDots className="mr-1" /> {comment.children.length}{" "}
+            Reply
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            className="underline"
+            onClick={() => setShow((prevState) => !prevState)}
+          >
+            Reply
+          </Button>
+        </div>
+        <div className="">
+          <Button
+            variant="ghost"
+            className=" text-red-500 "
+            onClick={() => handleDeleteComment(comment.id)}
+          >
+            <MdOutlineDelete className="text-xl" />
+          </Button>
+        </div>
+      </div>
+
       {show && (
         <div>
           <FormContainer action={postCommentReply}>
