@@ -305,7 +305,7 @@ export const fetchSingleBlogPost = async (blogId) => {
         content: true,
         createdAt: true,
         like_count: true,
-        comment_count:true,
+        comment_count: true,
         Tag: true,
         profile: {
           select: {
@@ -452,17 +452,85 @@ export const AddCommentAction = async (prevState, formData) => {
     const data = { ...rawData, profileId };
     const validateFields = await validateWithZodSchema(commentSchema, data);
     await db.comment.create({
-      data:validateFields
-    })
-     await db.blog.update({
-       where: { id: validateFields.blogId },
-       data: { comment_count: { increment: 1 } },
-       select: { profileId: true },
-     });
-    revalidatePath(`/blog/${validateFields.blogId}`)
-    return {message:"comment posted"}
+      data: validateFields,
+    });
+    await db.blog.update({
+      where: { id: validateFields.blogId },
+      data: { comment_count: { increment: 1 } },
+      select: { profileId: true },
+    });
+    revalidatePath(`/blog/${validateFields.blogId}`);
+    return { message: "comment posted" };
   } catch (err) {
-    console.log(err)
+    console.log(err);
     return { message: err.message };
+  }
+};
+export const fetchComment = async (blogId, take, skip) => {
+  try {
+    const comment = await db.comment.findMany({
+      take: take,
+      skip: skip,
+      orderBy: [{ createdAt: "desc" }],
+      where: { blogId: blogId, replyingto: false },
+      select: {
+        id: true,
+        blogId: true,
+        comment: true,
+        replyingto: true,
+        profileId: true,
+        children: true,
+        profile: {
+          select: {
+            firstName: true,
+            lastName: true,
+            profileImage: true,
+            username: true,
+          },
+        },
+      },
+    });
+    return comment;
+  } catch (err) {
+    console.log(err);
+  }
+};
+export const postCommentReply = async (prevState, formData) => {
+  try {
+    const profileId = await getAuthUser();
+    const rawData = Object.fromEntries(formData);
+    rawData.replyingto = rawData.replyingto === "true";
+    const data = { ...rawData, profileId };
+    const validateFields = await validateWithZodSchema(commentSchema, data);
+
+    await db.comment.update({
+      where: { id: rawData.parentId },
+      data: {
+        children: {
+          create: {
+            comment: validateFields.comment,
+            blogId: validateFields.blogId,
+            replyingto: true,
+            profileId: profileId,
+          },
+        },
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return { message: err.message };
+  }
+};
+export const fetchCommentReply = async (commentId) => {
+  try {
+    const comment=await db.comment.findMany({
+      where: {
+        parentId: commentId,
+        replyingto: true,
+      },
+    });
+    return comment
+  } catch (err) {
+    console.log(err);
   }
 };

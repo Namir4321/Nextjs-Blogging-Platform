@@ -84,12 +84,16 @@ model Favourite {
 }
 
 model Comment {
-  id         String   @id @default(uuid())
-  blog       Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  id         String    @id @default(uuid())
+  blog       Blog      @relation(fields: [blogId], references: [id], onDelete: Cascade)
   blogId     String
   comment    String
-  replyingto Boolean  @default(false)
-  profile    Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  replyingto Boolean   @default(false)
+  profile    Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId  String
-  children   String[]
+  parentId   String?
+  parent     Comment?  @relation("CommentChildren", fields: [parentId], references: [id])
+  children   Comment[] @relation("CommentChildren")
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now())
 }

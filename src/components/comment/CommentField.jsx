@@ -8,7 +8,7 @@ const CommentField = ({ blog }) => {
       <FormContainer action={AddCommentAction}>
         <TextAreaInput
           name="comment"
-          row={5}
+          row={3}
           placeholder="Leave a comment..."
           className="bg-gray-50 mb-2"
         />

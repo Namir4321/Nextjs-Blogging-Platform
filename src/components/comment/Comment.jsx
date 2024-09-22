@@ -9,6 +9,7 @@ import {
 import { Button } from "../ui/button";
 import { FaRegCommentDots } from "react-icons/fa";
 import CommentField from "@/components/comment/CommentField";
+import CommentRender from "@/components/comment/CommentRender";
 const CommentBox = ({ blog }) => {
   return (
     <Sheet>
@@ -23,6 +24,7 @@ const CommentBox = ({ blog }) => {
           <SheetDescription>{blog.title}</SheetDescription>
         </SheetHeader>
         <CommentField blog={blog}/>
+        <CommentRender blogId={blog.id}/>
       </SheetContent>
     </Sheet>
   );
