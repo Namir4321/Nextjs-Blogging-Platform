@@ -15,8 +15,9 @@ const CommentReplyRender = ({ commentId }) => {
     setSkip(skip + 5);
     setTake(take + 5);
   };
-  const handleDeleteComment = async (id) => {
-    const deletereply = await postDeleteReply(id);
+  const handleDeleteComment = async (id,blogId) => {
+    const main="reply comment"
+    const deletereply = await postDeleteReply(id,blogId,main);
   };
   useEffect(() => {
     const fetchComments = async () => {
@@ -62,7 +63,7 @@ const CommentReplyRender = ({ commentId }) => {
                 <Button
                   variant="ghost"
                   className=" text-red-600"
-                  onClick={() => handleDeleteComment(comment.id)}
+                  onClick={() => handleDeleteComment(comment.id,comment.blogId)}
                 >
                   <MdOutlineDelete className="text-xl" />
                 </Button>

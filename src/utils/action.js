@@ -535,6 +535,7 @@ export const fetchCommentReply = async (commentId, take, skip) => {
       select: {
         id: true,
         comment: true,
+        blogId:true,
         createdAt: true,
         updatedAt: true,
         profile: {
@@ -553,14 +554,21 @@ export const fetchCommentReply = async (commentId, take, skip) => {
   }
 };
 
-export const postDeleteReply = async (id) => {
+export const postDeleteReply = async (id,blogId,main) => {
   try {
-    console.log(id)
     await db.comment.delete({
       where:{
         id:id
       }
     })
+    if(main==="main comment"){
+       await db.blog.update({
+         where: { id: blogId },
+         data: { comment_count: { increment: -1 } },
+         select: { profileId: true },
+       });
+       revalidatePath(`/blog/${blogId}`);
+    }
   } catch (err) {
     console.log(err);
   }

@@ -8,9 +8,11 @@ import { FaRegCommentDots } from "react-icons/fa";
 import { MdOutlineDelete } from "react-icons/md";
 const CommentReply = ({ comment, setISshow }) => {
   const [show, setShow] = useState(false);
-  const handleDeleteComment = async (Id) => {
-    const deletepost = await postDeleteReply(Id);
+  const handleDeleteComment = async (Id,blogId) => {
+    const main="main comment"
+    const deletepost = await postDeleteReply(Id,blogId,main);
   };
+
   return (
     <div className="">
       <div className="flex  justify-between">
@@ -37,7 +39,7 @@ const CommentReply = ({ comment, setISshow }) => {
           <Button
             variant="ghost"
             className=" text-red-500 "
-            onClick={() => handleDeleteComment(comment.id)}
+            onClick={() => handleDeleteComment(comment.id,comment.blogId)}
           >
             <MdOutlineDelete className="text-xl" />
           </Button>
