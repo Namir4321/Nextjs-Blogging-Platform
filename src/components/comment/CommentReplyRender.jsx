@@ -8,6 +8,7 @@ import { MdOutlineDelete } from "react-icons/md";
 
 const CommentReplyRender = ({ commentId }) => {
   const [replycomments, setIsReplyingComment] = useState([]);
+  const [refresh, setRefresh] = useState(false);
   const [take, setTake] = useState(5);
   const [skip, setSkip] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -15,19 +16,28 @@ const CommentReplyRender = ({ commentId }) => {
     setSkip(skip + 5);
     setTake(take + 5);
   };
-  const handleDeleteComment = async (id,blogId) => {
-    const main="reply comment"
-    const deletereply = await postDeleteReply(id,blogId,main);
+  const handleDeleteComment = async (id, blogId) => {
+    try {
+      const main = "reply comment";
+      const deletereply = await postDeleteReply(id, blogId, main);
+
+      setRefresh((prevState) => !prevState);
+    } catch (err) {
+      console.error("Failed to delete reply:", err);
+    }
   };
+
+  console.log(refresh);
   useEffect(() => {
     const fetchComments = async () => {
       setLoading(true);
       try {
         const newComments = await fetchCommentReply(commentId, take, skip);
-        setIsReplyingComment((prevComments) => [
-          ...prevComments,
-          ...newComments,
-        ]);
+        if (refresh || skip === 0) {
+         setIsReplyingComment(newComments); 
+        } else {
+         setIsReplyingComment((prevComments) => [...prevComments, ...newComments]); // Append to the existing list if not refreshing
+        }
       } catch (err) {
         console.error(err);
       } finally {
@@ -36,7 +46,7 @@ const CommentReplyRender = ({ commentId }) => {
     };
 
     fetchComments();
-  }, [take,skip,commentId]);
+  }, [take, skip, refresh]);
 
   if (!replycomments.length) {
     return <div className="mt-5">No reply comments</div>;
@@ -63,7 +73,9 @@ const CommentReplyRender = ({ commentId }) => {
                 <Button
                   variant="ghost"
                   className=" text-red-600"
-                  onClick={() => handleDeleteComment(comment.id,comment.blogId)}
+                  onClick={() =>
+                    handleDeleteComment(comment.id, comment.blogId)
+                  }
                 >
                   <MdOutlineDelete className="text-xl" />
                 </Button>

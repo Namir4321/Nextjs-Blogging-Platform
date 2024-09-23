@@ -5,7 +5,7 @@ import NavAuth from "@/components/Navbar/NavAuth";
 
 const Navbar = () => {
   return (
-    <nav className="border-b ">
+    <nav className="border-b sticky">
       <div className="container flex justify-between">
         <div className=" flex flex-row gap-4 py-4 ">
           <Navlogo />

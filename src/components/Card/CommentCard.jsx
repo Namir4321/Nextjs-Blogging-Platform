@@ -4,8 +4,9 @@ import ReplyCard from "@/components/Card/ReplyCard";
 import CommentReply from "@/components/comment/CommentReply";
 import CommentReplyRender from "@/components/comment/CommentReplyRender";
 import { useState } from "react";
-const CommentCard = ({ comment }) => {
+const CommentCard = ({ comment ,setRefresh}) => {
   const [show, setISshow] = useState(false);
+  const [numreply,setNumReply]=useState()
   return (
     <div className="w-full">
       <div className="my-5 p-6 rounded-md border-gray-100">
@@ -25,11 +26,13 @@ const CommentCard = ({ comment }) => {
         </div>
         <p className="font-sans text-xl ml-3">{comment.comment}</p>
         <CommentReply
+          numreply={numreply}
           comment={comment}
           key={comment.id}
           setISshow={setISshow}
+          setRefresh={setRefresh}
         />
-        {show && <CommentReplyRender commentId={comment.id} />}
+        {show && <CommentReplyRender commentId={comment.id} setNumReply={setNumReply}/>}
       </div>
     </div>
   );

@@ -6,11 +6,17 @@ import { postCommentReply, postDeleteReply } from "@/utils/action";
 import { ButtonProp } from "@/components/form/ButtonProp";
 import { FaRegCommentDots } from "react-icons/fa";
 import { MdOutlineDelete } from "react-icons/md";
-const CommentReply = ({ comment, setISshow }) => {
+const CommentReply = ({ comment, setISshow,setRefresh }) => {
   const [show, setShow] = useState(false);
-  const handleDeleteComment = async (Id,blogId) => {
-    const main="main comment"
-    const deletepost = await postDeleteReply(Id,blogId,main);
+  const handleDeleteComment = async (Id, blogId) => {
+    try {
+      const main = "main comment";
+      const deletereply = await postDeleteReply(Id, blogId, main);
+
+      setRefresh((prevState) => !prevState);
+    } catch (err) {
+      console.error("Failed to delete reply:", err);
+    }
   };
 
   return (
@@ -39,7 +45,7 @@ const CommentReply = ({ comment, setISshow }) => {
           <Button
             variant="ghost"
             className=" text-red-500 "
-            onClick={() => handleDeleteComment(comment.id,comment.blogId)}
+            onClick={() => handleDeleteComment(comment.id, comment.blogId)}
           >
             <MdOutlineDelete className="text-xl" />
           </Button>

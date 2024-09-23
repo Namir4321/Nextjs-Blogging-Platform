@@ -556,7 +556,7 @@ export const fetchCommentReply = async (commentId, take, skip) => {
 
 export const postDeleteReply = async (id,blogId,main) => {
   try {
-    await db.comment.delete({
+    const res=await db.comment.delete({
       where:{
         id:id
       }
@@ -568,6 +568,7 @@ export const postDeleteReply = async (id,blogId,main) => {
          select: { profileId: true },
        });
        revalidatePath(`/blog/${blogId}`);
+       return res
     }
   } catch (err) {
     console.log(err);
