@@ -75,6 +75,7 @@ const page = async () => {
             <TextAreaInput
               name="Bio"
               labelText=" "
+              defaultValue={profile.bio}
               className="mb-4 bg-gray-100 text-black pl-7 hover:bg-white outline-none focus-visible:ring-0"
               row="5"
             />

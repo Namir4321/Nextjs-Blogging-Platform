@@ -30,6 +30,7 @@ export const getProfileImage = async () => {
       email: true,
       profileImage: true,
       username: true,
+      bio:true
     },
   });
   return profile || null;
