@@ -11,7 +11,7 @@ const SideNav = () => {
   let page = location.pathname.split("/")[2];
   let pageStateTab = useRef();
 
-  let [pageState, setPageState] = useState(page?page.replace("-", " "):"change password");
+  let [pageState, setPageState] = useState(page?page.replace("-", " "):"edit profile");
   let [showSideNav, setShowSideNav] = useState(false);
   useEffect(() => {
     pageStateTab.current.click();

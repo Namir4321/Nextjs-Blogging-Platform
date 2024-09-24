@@ -37,7 +37,7 @@ const NavLink = async () => {
             <Link href="/dashboard">Dashboard</Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Link href="/setting/change-password">Setting</Link>
+            <Link href="/setting/edit-profile">Setting</Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem className="grid gap-1">

@@ -5,11 +5,14 @@ import {
   BlogSchema,
   commentSchema,
   imageSchema,
+  profileUpdateSchema,
   validateWithZodSchema,
 } from "./FormValidation";
 import { UploadImage } from "@/utils/supabase";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import github from "next-auth/providers/github";
+import { profile } from "console";
 export const getAuthUser = async () => {
   const session = await auth();
   if (!session) return null;
@@ -59,12 +62,11 @@ export const ProfileImageAction = async (prevState, formData) => {
         profileImage: fullpath,
       },
     });
-    
   } catch (err) {
     console.log(err);
     return { message: err.message };
   }
-   revalidatePath("/setting/edit-profile");
+  revalidatePath("/setting/edit-profile");
 };
 export const createBlogAction = async (data) => {
   const user = await getAuthUser();
@@ -616,4 +618,49 @@ export const fetchSocialLink = async () => {
   } catch (err) {
     console.log(err);
   }
+};
+export const UpdateProfileAction = async (prevState, formData) => {
+  try {
+    const profileId = await getAuthUser();
+    const rawData = Object.fromEntries(formData);
+    const validateFields = await validateWithZodSchema(
+      profileUpdateSchema,
+      rawData
+    );
+    const { id } = await db.Social_Links.findFirst({
+      where: { profileId: profileId },
+      select: { id: true },
+    });
+    await db.profile.update({
+      where: { id: profileId },
+      data: { username: validateFields.username, bio: validateFields.Bio },
+    });
+    if (id) {
+      await db.Social_Links.update({
+        where: { id: id },
+        data: {
+          youtube: validateFields.youtube,
+          instagram: validateFields.instagram,
+          facebook: validateFields.facebook,
+          twitter: validateFields.twitter,
+          github: validateFields.github,
+          website: validateFields.website,
+        },
+      });
+    } else {
+      await db.create.Social_Links.create({
+        profileId: profileId,
+        youtube: validateFields.youtube,
+        instagram: validateFields.instagram,
+        facebook: validateFields.facebook,
+        twitter: validateFields.twitter,
+        github: validateFields.github,
+        website: validateFields.website,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    return { message: err.message };
+  }
+  revalidatePath("/setting/edit-profile");
 };

@@ -27,7 +27,6 @@ const FormInput = ({
           type={type}
           placeholder={placeholder || name}
           defaultValue={defaultValue}
-          required
           disabled={disabled||false}
           onChange={onChange}
           onKeyDown={onKeyDown}

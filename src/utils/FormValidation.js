@@ -87,3 +87,64 @@ export const commentSchema = z.object({
   blogId: z.string().uuid("Please login in first to publish"),
   replyingto: z.boolean(),
 });
+
+export const profileUpdateSchema = z.object({
+  username: z
+    .string()
+    .regex(/^@.+\d{3}$/, {
+      message:
+        "Must start with '@', followed by more than three characters, and end with three digits.",
+    })
+    .refine((value) => value.length > 5, {
+      message: "Must have more than three characters after '@'.",
+    }),
+
+  Bio: z
+    .string()
+    .optional()
+    .nullable()
+    .refine((val) => val === null || val === "" || val.length > 5, {
+      message: "Bio must be more than 5 characters",
+    }),
+  youtube: z
+    .string()
+    .optional()
+    .refine((val) => val === "" || z.string().url().safeParse(val).success, {
+      message: "Invalid URL format",
+    }),
+
+  instagram: z
+    .string()
+    .optional()
+    .refine((val) => val === "" || z.string().url().safeParse(val).success, {
+      message: "Invalid URL format",
+    }),
+
+  facebook: z
+    .string()
+    .optional()
+    .refine((val) => val === "" || z.string().url().safeParse(val).success, {
+      message: "Invalid URL format",
+    }),
+
+  twitter: z
+    .string()
+    .optional()
+    .refine((val) => val === "" || z.string().url().safeParse(val).success, {
+      message: "Invalid URL format",
+    }),
+
+  github: z
+    .string()
+    .optional()
+    .refine((val) => val === "" || z.string().url().safeParse(val).success, {
+      message: "Invalid URL format",
+    }),
+
+  website: z
+    .string()
+    .optional()
+    .refine((val) => val === "" || z.string().url().safeParse(val).success, {
+      message: "Invalid URL format",
+    }),
+});
