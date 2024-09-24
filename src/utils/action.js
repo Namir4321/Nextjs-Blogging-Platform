@@ -48,8 +48,8 @@ export const totalBlogAction = async (tagsearch) => {
   }
 };
 export const ProfileImageAction = async (prevState, formData) => {
+  const profile = await getAuthUser();
   try {
-    const profile = await getAuthUser();
     const image = formData.get("image");
     const validateFields = await validateWithZodSchema(imageSchema, { image });
     const fullpath = await UploadImage(validateFields.image);
@@ -59,11 +59,12 @@ export const ProfileImageAction = async (prevState, formData) => {
         profileImage: fullpath,
       },
     });
-     redirect("/setting/edit-profile");
+    
   } catch (err) {
     console.log(err);
     return { message: err.message };
   }
+   revalidatePath("/setting/edit-profile");
 };
 export const createBlogAction = async (data) => {
   const user = await getAuthUser();

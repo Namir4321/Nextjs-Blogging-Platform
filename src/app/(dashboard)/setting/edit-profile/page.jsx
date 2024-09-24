@@ -11,6 +11,7 @@ import { FaFacebookF } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaGithub } from "react-icons/fa";
 import { CiGlobe } from "react-icons/ci";
+import FormContainer from "@/components/form/FormContainer";
 
 const page = async () => {
   const profile = await getProfileImage();
@@ -31,6 +32,9 @@ const page = async () => {
           />
         </div>
         <div className="w-full p-4">
+          <FormContainer>
+
+          </FormContainer>
           <div className="grid grid-cols-1 md:grid-cols-2 md:gap-5 ">
             <FormInput
               className="mb-4 bg-gray-100 text-black pl-7 hover:bg-white outline-none focus-visible:ring-0"
@@ -86,7 +90,7 @@ const page = async () => {
               type="text"
               label=" "
               defaultValue={
-                social.youtube ? social.youtube : "Add your youtube channel"
+                social?.youtube ? social.youtube : "Add your youtube channel"
               }
               iconclassName="absolute text-black top-3 pl-1 text-black"
               icon={<FaYoutube />}
@@ -98,7 +102,7 @@ const page = async () => {
               type="text"
               label=" "
               defaultValue={
-                social.instagram
+                social?.instagram
                   ? social.instagram
                   : "Add your instagram account"
               }
@@ -112,7 +116,7 @@ const page = async () => {
               type="text"
               label=" "
               defaultValue={
-                social.facebook ? social.facebook : "Add your facebook account"
+                social?.facebook ? social.facebook : "Add your facebook account"
               }
               iconclassName="absolute text-black top-3 pl-1 text-black"
               icon={<FaFacebookF />}
@@ -124,7 +128,7 @@ const page = async () => {
               type="text"
               label=" "
               defaultValue={
-                social.twitter ? social.twitter : "Add your twitter account"
+                social?.twitter ? social.twitter : "Add your twitter account"
               }
               iconclassName="absolute text-black top-3 pl-1 text-black"
               icon={<FaXTwitter />}
@@ -136,7 +140,7 @@ const page = async () => {
               type="text"
               label=" "
               defaultValue={
-                social.github ? social.github : "Add your github account"
+                social?.github ? social.github : "Add your github account"
               }
               iconclassName="absolute text-black top-3 pl-1 text-black"
               icon={<FaGithub />}
@@ -148,7 +152,7 @@ const page = async () => {
               type="text"
               label=" "
               defaultValue={
-                social.website ? social.website : "Add your website"
+                social?.website ? social.website : "Add your website"
               }
               iconclassName="absolute text-black top-3 pl-1 text-black"
               icon={<CiGlobe />}

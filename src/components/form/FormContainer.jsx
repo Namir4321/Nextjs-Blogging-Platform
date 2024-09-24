@@ -11,7 +11,7 @@ const FormContainer = ({ action, children }) => {
   const { toast } = useToast();
   const formRef = useRef(null);
   useEffect(() => {
-    if (state.message) {
+    if (state) {
       toast({ variant: state.variant, description: state.message });
       if (formRef.current) {
         formRef.current.reset();
