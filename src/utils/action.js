@@ -7,11 +7,8 @@ import {
   imageSchema,
   validateWithZodSchema,
 } from "./FormValidation";
-import { get } from "http";
-import { profile } from "console";
+import { UploadImage } from "@/utils/supabase";
 import { redirect } from "next/navigation";
-import { comment } from "postcss";
-import github from "next-auth/providers/github";
 import { revalidatePath } from "next/cache";
 export const getAuthUser = async () => {
   const session = await auth();
@@ -50,11 +47,23 @@ export const totalBlogAction = async (tagsearch) => {
     return { message: err.message };
   }
 };
-export const BlogImageAction = async (prevState, formData) => {
-  console.log("clicked");
-  const image = formData.get("image");
-  console.log(image);
-  const validateFields = await validateWithZodSchema(imageSchema, { image });
+export const ProfileImageAction = async (prevState, formData) => {
+  try {
+    const profile = await getAuthUser();
+    const image = formData.get("image");
+    const validateFields = await validateWithZodSchema(imageSchema, { image });
+    const fullpath = await UploadImage(validateFields.image);
+    await db.profile.update({
+      where: { id: profile },
+      data: {
+        profileImage: fullpath,
+      },
+    });
+     redirect("/setting/edit-profile");
+  } catch (err) {
+    console.log(err);
+    return { message: err.message };
+  }
 };
 export const createBlogAction = async (data) => {
   const user = await getAuthUser();
@@ -515,12 +524,11 @@ export const postCommentReply = async (prevState, formData) => {
         },
       },
     });
-     revalidatePath(`/blog/${validateFields.blogId}`);
+    revalidatePath(`/blog/${validateFields.blogId}`);
   } catch (err) {
     console.log(err);
     return { message: err.message };
   }
- 
 };
 export const fetchCommentReply = async (commentId, take, skip) => {
   try {
@@ -535,7 +543,7 @@ export const fetchCommentReply = async (commentId, take, skip) => {
       select: {
         id: true,
         comment: true,
-        blogId:true,
+        blogId: true,
         createdAt: true,
         updatedAt: true,
         profile: {
@@ -554,22 +562,56 @@ export const fetchCommentReply = async (commentId, take, skip) => {
   }
 };
 
-export const postDeleteReply = async (id,blogId,main) => {
+export const postDeleteReply = async (id, blogId, main) => {
   try {
-    const res=await db.comment.delete({
-      where:{
-        id:id
-      }
-    })
-    if(main==="main comment"){
-       await db.blog.update({
-         where: { id: blogId },
-         data: { comment_count: { increment: -1 } },
-         select: { profileId: true },
-       });
-       revalidatePath(`/blog/${blogId}`);
-       return res
+    const res = await db.comment.delete({
+      where: {
+        id: id,
+      },
+    });
+    if (main === "main comment") {
+      await db.blog.update({
+        where: { id: blogId },
+        data: { comment_count: { increment: -1 } },
+        select: { profileId: true },
+      });
+      revalidatePath(`/blog/${blogId}`);
+      return res;
     }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const changePasswordAction = async (prevState, formData) => {
+  try {
+    const profileId = await getAuthUser();
+    const rawData = Object.fromEntries(formData);
+    const { password } = await db.profile.findUnique({
+      where: { id: profileId },
+      select: { password: true },
+    });
+    if (password === rawData.oldpassword) {
+      await db.profile.update({
+        where: { id: profileId },
+        data: {
+          password: rawData.changepassword,
+        },
+      });
+      return { message: "Password Changed" };
+    }
+  } catch (err) {
+    console.log(err);
+    return { message: err.message };
+  }
+};
+export const fetchSocialLink = async () => {
+  try {
+    const userId = await getAuthUser();
+    const social = await db.Social_Links.findFirst({
+      where: { profileId: userId },
+    });
+    return social;
   } catch (err) {
     console.log(err);
   }

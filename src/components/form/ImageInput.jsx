@@ -4,10 +4,10 @@ import { Input } from "@/components/ui/input";
 const ImageInput = ({className,children}) => {
   const name = "image";
   return (
-    <div className="mb-2">
-      <Label htmlFor={name} className="capitalize">
+    <div className="mb-2 flex flex-col items-center justify-center">
+      {/* <Label htmlFor={name} className="capitalize mb-2">
       {children||name}
-      </Label>
+      </Label> */}
       <Input
         id={name}
         name={name}

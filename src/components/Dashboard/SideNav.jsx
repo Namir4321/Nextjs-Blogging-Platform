@@ -29,7 +29,7 @@ const SideNav = () => {
           />
         </div>
         <div
-          className={`min-w-[200px]  md:sticky top-24 overflow-y-auto p-6 md:pr-0 md:border-gray-100 md:border-r absolute max-md:top-[64px] bg-white max-md:w-[calc(100%+80px]) max-md:px-1 max-md:ml-7 duration-500 ${
+          className={`min-w-[250px]   md:sticky top-24 overflow-y-auto p-6 md:pr-0 md:border-gray-100 md:border-r absolute max-md:top-[58px] bg-white max-md:w-[calc(100%+80px]) max-md:px-1 max-md:ml-0 duration-500 ${
             showSideNav
               ? "opacity-100 pointer-events-auto"
               : "max-md:opacity-0 max-md:pointer-events-none"
