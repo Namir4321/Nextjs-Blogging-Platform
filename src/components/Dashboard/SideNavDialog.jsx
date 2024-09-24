@@ -9,7 +9,7 @@ const SideNavDialog = ({ pageState, setShowSideNav, pageStateTab }) => {
   const changePageState = (e) => {
     let { offsetWidth, offsetLeft } = e.target;
     activeTabLine.current.style.width = `${offsetWidth}px`;
-    activeTabLine.current.style.transform = `translateX(${offsetLeft}px)`; // This will move the line to the active button
+    activeTabLine.current.style.transform = `translateX(${offsetLeft}px)`; 
 
     if (e.target == sideBarIcon.current) {
       setShowSideNav((prev) => !prev);
