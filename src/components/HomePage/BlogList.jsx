@@ -12,7 +12,7 @@ const BlogList = ({ blogs }) => {
   return (
     <section className="mt-4 gap-8 container">
       {blogs.slice(0, visibleBlogs).map((blog) => (
-        <BlogCard key={blog.id} blog={blog} />
+        <BlogCard key={blog.id} blog={blog}  />
       ))}
 
       {visibleBlogs < blogs.length && (

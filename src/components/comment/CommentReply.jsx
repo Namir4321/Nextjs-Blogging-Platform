@@ -6,12 +6,17 @@ import { postCommentReply, postDeleteReply } from "@/utils/action";
 import { ButtonProp } from "@/components/form/ButtonProp";
 import { FaRegCommentDots } from "react-icons/fa";
 import { MdOutlineDelete } from "react-icons/md";
-const CommentReply = ({ comment, setISshow,setRefresh }) => {
+const CommentReply = ({ comment, setISshow, setRefresh }) => {
   const [show, setShow] = useState(false);
   const handleDeleteComment = async (Id, blogId) => {
     try {
       const main = "main comment";
-      const deletereply = await postDeleteReply(Id, blogId, main);
+      const deletereply = await postDeleteReply(
+        Id,
+        blogId,
+        main,
+        comment.profile.id
+      );
 
       setRefresh((prevState) => !prevState);
     } catch (err) {
@@ -51,14 +56,20 @@ const CommentReply = ({ comment, setISshow,setRefresh }) => {
           </Button>
         </div>
       </div>
-
       {show && (
         <div>
+         
           <FormContainer action={postCommentReply}>
             <TextAreaInput row="2" name="comment" labelText=" " />
             <input type="hidden" name="blogId" value={comment.blogId} />
             <input type="hidden" name="replyingto" value="true" />
             <input type="hidden" name="parentId" value={comment.id} />
+            <input
+              type="hidden"
+              name="blogAuthor"
+              value={comment.profile.id}
+            />
+
             <ButtonProp
               type="submit"
               variant="default"

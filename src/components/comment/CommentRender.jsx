@@ -45,7 +45,7 @@ console.log(refresh)
   return (
     <div
       className="mt-3 max-h-[300px] overflow-y-auto no-scrollbar"
-      key={comment}
+      key={comment.id}
     >
       {comments.map((comment) => (
         <CommentCard

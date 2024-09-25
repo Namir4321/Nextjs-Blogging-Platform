@@ -5,6 +5,7 @@ import { getAuthUser } from "@/utils/action";
 import EditblogButton from "@/components/BlogView/EditblogButton";
 import Comment from "@/components/comment/Comment";
 const BlogInteraction = async ({ blog }) => {
+  
   const userId = await getAuthUser();
   return (
     <>
@@ -12,7 +13,7 @@ const BlogInteraction = async ({ blog }) => {
       <div className="flex justify-between gap-6">
         <div className="flex">
           <div className="flex gap-3 items-center">
-            <FavouriteToggleButton blogId={blog.id} />
+            <FavouriteToggleButton blogId={blog.id} blogAuthor={blog.profile.id} />
             {blog.like_count > 0 && (
               <span className="mr-1">
                 {blog.like_count}

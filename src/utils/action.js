@@ -30,7 +30,7 @@ export const getProfileImage = async () => {
       email: true,
       profileImage: true,
       username: true,
-      bio:true
+      bio: true,
     },
   });
   return profile || null;
@@ -88,7 +88,36 @@ export const createBlogAction = async (data) => {
   redirect("/");
 };
 export const fetchBlogAction = async () => {
+  const userId = await getAuthUser();
   try {
+    if (userId) {
+      const blogs = await db.blog.findMany({
+        select: {
+          id: true,
+          title: true,
+          banner: true,
+          description: true,
+          content: true,
+          createdAt: true,
+          Tag: true,
+          like_count: true,
+          profile: {
+            select: {
+              firstName: true,
+              lastName: true,
+              profileImage: true,
+              username: true,
+              id: true,
+            },
+          },
+          Favourite: {
+            where: { profileId: userId },
+            select: { blogId: true },
+          },
+        },
+      });
+      return blogs;
+    }
     const blogs = await db.blog.findMany({
       select: {
         id: true,
@@ -98,6 +127,7 @@ export const fetchBlogAction = async () => {
         content: true,
         createdAt: true,
         Tag: true,
+        like_count: true,
         profile: {
           select: {
             firstName: true,
@@ -112,7 +142,6 @@ export const fetchBlogAction = async () => {
     return blogs;
   } catch (err) {
     console.log(err);
-    return { message: err.message };
   }
 };
 export const fetchtrendingBlogAction = async () => {
@@ -140,9 +169,7 @@ export const fetchtrendingBlogAction = async () => {
       },
     });
     return trending;
-  } catch (err) {
-    return { message: err.message };
-  }
+  } catch (err) {}
 };
 
 export const fetchBlogWithFilterAction = async (tagsearch, search) => {
@@ -163,6 +190,7 @@ export const fetchBlogWithFilterAction = async (tagsearch, search) => {
         content: true,
         createdAt: true,
         Tag: true,
+        like_count: true,
         profile: {
           select: {
             firstName: true,
@@ -175,9 +203,7 @@ export const fetchBlogWithFilterAction = async (tagsearch, search) => {
       },
     });
     return filterBlog;
-  } catch (err) {
-    return { message: err.message };
-  }
+  } catch (err) {}
 };
 export const fetchUserAction = async (username) => {
   try {
@@ -197,9 +223,7 @@ export const fetchUserAction = async (username) => {
       },
     });
     return fetchUser;
-  } catch (err) {
-    return { message: err.message };
-  }
+  } catch (err) {}
 };
 
 export const fetchProfile = async (username) => {
@@ -284,9 +308,7 @@ export const getProfileFromUserId = async (userId) => {
       },
     });
     return profile;
-  } catch (err) {
-    return { message: err.message };
-  }
+  } catch (err) {}
 };
 export const updateReadCount = async (blogId) => {
   try {
@@ -302,9 +324,7 @@ export const updateReadCount = async (blogId) => {
         data: { totalread: { increment: 1 } },
       });
     }
-  } catch (err) {
-    return { message: err.message };
-  }
+  } catch (err) {}
 };
 export const fetchSingleBlogPost = async (blogId) => {
   try {
@@ -384,9 +404,7 @@ export const fetchSimillarBlog = async (
       },
     });
     return filterBlog;
-  } catch (err) {
-    return { message: err.message };
-  }
+  } catch (err) {}
 };
 export const EditBlogAction = async (data, Blog) => {
   try {
@@ -406,11 +424,11 @@ export const EditBlogAction = async (data, Blog) => {
     });
   } catch (err) {
     console.log(err);
-    return { message: err.message };
   }
   redirect("/");
 };
 export const fetchFavouriteId = async ({ blogId }) => {
+  console.log(blogId);
   const userId = await getAuthUser();
   const favourite = await db.favourite.findFirst({
     where: {
@@ -427,6 +445,7 @@ export const toggleFavouriteAction = async ({
   blogId,
   favouriteId,
   pathname,
+  blogAuthor,
 }) => {
   const user = await getAuthUser();
   try {
@@ -437,6 +456,14 @@ export const toggleFavouriteAction = async ({
       await db.blog.update({
         where: { id: blogId },
         data: { like_count: { increment: -1 } },
+      });
+      await db.notification.deleteMany({
+        where: {
+          blogId: blogId,
+          notificationId: user,
+          profileId: blogAuthor,
+          type: "like",
+        },
       });
     } else {
       await db.favourite.create({
@@ -449,12 +476,19 @@ export const toggleFavouriteAction = async ({
         where: { id: blogId },
         data: { like_count: { increment: 1 } },
       });
+      await db.notification.create({
+        data: {
+          type: "like",
+          blogId: blogId,
+          profileId: blogAuthor,
+          notificationId: user,
+        },
+      });
     }
     revalidatePath(pathname);
     return { message: favouriteId ? "You unlike a blog" : "you liked a blog" };
   } catch (err) {
     console.log(err);
-    return { message: err.message };
   }
 };
 export const AddCommentAction = async (prevState, formData) => {
@@ -464,13 +498,27 @@ export const AddCommentAction = async (prevState, formData) => {
     rawData.replyingto = rawData.replyingto === "true";
     const data = { ...rawData, profileId };
     const validateFields = await validateWithZodSchema(commentSchema, data);
-    await db.comment.create({
-      data: validateFields,
+    const comm = await db.comment.create({
+      data: {
+        blogId: validateFields.blogId,
+        comment: validateFields.comment,
+        replyingto: validateFields.replyingto,
+        profileId: validateFields.profileId,
+      },
     });
     await db.blog.update({
       where: { id: validateFields.blogId },
       data: { comment_count: { increment: 1 } },
       select: { profileId: true },
+    });
+    await db.notification.create({
+      data: {
+        type: "comment",
+        blogId: validateFields.blogId,
+        profileId: validateFields.UserId,
+        notificationId: validateFields.profileId,
+        commentId: comm.id,
+      },
     });
     revalidatePath(`/blog/${rawData.blogId}`);
     return { message: "comment posted" };
@@ -499,6 +547,7 @@ export const fetchComment = async (blogId, take, skip) => {
             lastName: true,
             profileImage: true,
             username: true,
+            id: true,
           },
         },
       },
@@ -515,7 +564,7 @@ export const postCommentReply = async (prevState, formData) => {
     rawData.replyingto = rawData.replyingto === "true";
     const data = { ...rawData, profileId };
     const validateFields = await validateWithZodSchema(commentSchema, data);
-    await db.comment.update({
+    const comma = await db.comment.update({
       where: { id: rawData.parentId },
       data: {
         children: {
@@ -528,6 +577,16 @@ export const postCommentReply = async (prevState, formData) => {
         },
       },
     });
+
+    await db.notification.create({
+      data: {
+        type: "reply",
+        blogId: validateFields.blogId,
+        profileId: profileId,
+        notificationId: validateFields.blogAuthor,
+      },
+    });
+
     revalidatePath(`/blog/${validateFields.blogId}`);
   } catch (err) {
     console.log(err);
@@ -566,18 +625,38 @@ export const fetchCommentReply = async (commentId, take, skip) => {
   }
 };
 
-export const postDeleteReply = async (id, blogId, main) => {
+export const postDeleteReply = async (id, blogId, main, blogAuthor) => {
   try {
+    const user = await getAuthUser();
     const res = await db.comment.delete({
       where: {
         id: id,
       },
     });
+    if (main === "reply comment") {
+      await db.notification.deleteMany({
+        where: {
+          blogId: blogId,
+          notificationId: user,
+          profileId: blogAuthor,
+          type: "reply",
+        },
+      });
+    }
     if (main === "main comment") {
       await db.blog.update({
         where: { id: blogId },
         data: { comment_count: { increment: -1 } },
         select: { profileId: true },
+      });
+
+      await db.notification.deleteMany({
+        where: {
+          blogId: blogId,
+          notificationId: user,
+          profileId: blogAuthor,
+          type: "comment",
+        },
       });
       revalidatePath(`/blog/${blogId}`);
       return res;
@@ -664,4 +743,16 @@ export const UpdateProfileAction = async (prevState, formData) => {
     return { message: err.message };
   }
   revalidatePath("/setting/edit-profile");
+};
+
+export const fetchNotification = async () => {
+  const userId = await getAuthUser();
+  if (!userId) return;
+  const notified = await db.notification.findMany({
+    where: {
+      notificationId: userId,
+      seen: false,
+    },
+  });
+  return notified;
 };

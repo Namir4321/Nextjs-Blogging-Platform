@@ -16,10 +16,10 @@ const CommentReplyRender = ({ commentId }) => {
     setSkip(skip + 5);
     setTake(take + 5);
   };
-  const handleDeleteComment = async (id, blogId) => {
+  const handleDeleteComment = async (id, blogId, blogAuthor) => {
     try {
       const main = "reply comment";
-      const deletereply = await postDeleteReply(id, blogId, main);
+      const deletereply = await postDeleteReply(id, blogId, main, blogAuthor);
 
       setRefresh((prevState) => !prevState);
     } catch (err) {
@@ -74,7 +74,7 @@ const CommentReplyRender = ({ commentId }) => {
                   variant="ghost"
                   className=" text-red-600"
                   onClick={() =>
-                    handleDeleteComment(comment.id, comment.blogId)
+                    handleDeleteComment(comment.id, comment.blogId,comment.profile.id)
                   }
                 >
                   <MdOutlineDelete className="text-xl" />

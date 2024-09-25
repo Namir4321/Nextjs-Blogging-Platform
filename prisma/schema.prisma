@@ -15,22 +15,24 @@ datasource db {
 }
 
 model Profile {
-  id           String         @id @default(uuid())
-  firstName    String
-  lastName     String
-  username     String         @unique
-  email        String         @unique
-  bio          String         @default("")
-  password     String
-  profileImage String
-  totalread    Int            @default(0)
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @default(now())
-  Blog         Blog[]
-  Social_Links Social_Links[]
-  Activity     Activity[]
-  Favourite    Favourite[]
-  Comment      Comment[]
+  id            String         @id @default(uuid())
+  firstName     String
+  lastName      String
+  username      String         @unique
+  email         String         @unique
+  bio           String         @default("")
+  password      String
+  profileImage  String
+  totalread     Int            @default(0)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now())
+  Blog          Blog[]
+  Social_Links  Social_Links[]
+  Activity      Activity[]
+  Favourite     Favourite[]
+  Comment       Comment[]
+  Notification  Notification[] @relation("NotificationSender")
+  Notifications Notification[] @relation("NotificationReceiver")
 }
 
 model Social_Links {
@@ -46,23 +48,24 @@ model Social_Links {
 }
 
 model Blog {
-  id            String      @id @default(uuid())
+  id            String         @id @default(uuid())
   title         String
   banner        String
   description   String
   content       Json
-  profile       Profile     @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profile       Profile        @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId     String
   Tag           String[]
-  like_count    Int         @default(0)
-  comment_count Int         @default(0)
-  read_count    Int         @default(0)
-  draft         Boolean     @default(false)
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @default(now())
+  like_count    Int            @default(0)
+  comment_count Int            @default(0)
+  read_count    Int            @default(0)
+  draft         Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now())
   Activity      Activity[]
   Favourite     Favourite[]
   Comment       Comment[]
+  Notification  Notification[]
 }
 
 model Activity {
@@ -84,16 +87,37 @@ model Favourite {
 }
 
 model Comment {
-  id         String    @id @default(uuid())
-  blog       Blog      @relation(fields: [blogId], references: [id], onDelete: Cascade)
-  blogId     String
-  comment    String
-  replyingto Boolean   @default(false)
-  profile    Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  profileId  String
-  parentId   String?
-  parent     Comment?  @relation("CommentChildren", fields: [parentId], references: [id])
-  children   Comment[] @relation("CommentChildren")
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @default(now())
+  id           String         @id @default(uuid())
+  blog         Blog           @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  blogId       String
+  comment      String
+  replyingto   Boolean        @default(false)
+  profile      Profile        @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId    String
+  parentId     String?
+  parent       Comment?       @relation("CommentChildren", fields: [parentId], references: [id])
+  children     Comment[]      @relation("CommentChildren")
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @default(now())
+  Notification Notification[]
+}
+
+enum NotificationType {
+  comment
+  reply
+  like
+}
+
+model Notification {
+  id              String           @id @default(uuid())
+  type            NotificationType
+  blog            Blog             @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  blogId          String
+  notificationFor Profile          @relation("NotificationReceiver", fields: [notificationId], references: [id], onDelete: Cascade)
+  notificationId  String
+  seen            Boolean          @default(false)
+  profile         Profile          @relation("NotificationSender", fields: [profileId], references: [id], onDelete: Cascade)
+  profileId       String
+  comment         Comment?         @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId       String?
 }

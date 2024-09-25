@@ -14,6 +14,7 @@ const CommentField = ({ blog }) => {
         />
         <input type="hidden" name="blogId" value={blog.id} />
         <input type="hidden" name="replyingto" value="false" />
+        <input type="hidden" name="UserId"value={blog.profile.id}/>
         <ButtonProp
           type="submit"
           variant="default"

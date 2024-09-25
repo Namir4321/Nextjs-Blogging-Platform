@@ -19,6 +19,7 @@ const BlogContainer = ({ selectedTag }) => {
         if (selectedTag === "home") {
           const result = await fetchBlogAction();
           setBlogs(result);
+         
         }
         if (selectedTag !== "home") {
           const result = await fetchBlogWithFilterAction(selectedTag);
@@ -41,7 +42,6 @@ const BlogContainer = ({ selectedTag }) => {
   if (loading) {
     return <LoadingMainCard />;
   }
-
   if (blogs.length === 0) {
     return (
       <h6 className="flex items-center justify-center bg-gray-100 ">

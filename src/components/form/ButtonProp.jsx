@@ -47,7 +47,7 @@ export const CardSubmitButton = ({ isFavourite }) => {
     <Button
       type="submit"
       size="icon"
-      variant="ghost"
+      variant="icon"
       className="p-2 cursor-pointer"
     >
       {pending ? (

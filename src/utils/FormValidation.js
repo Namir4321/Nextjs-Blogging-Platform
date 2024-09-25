@@ -85,7 +85,9 @@ export const commentSchema = z.object({
   comment: z.string().min(2, "write something to leave a comment"),
   profileId: z.string().uuid("Please login in first to publish"),
   blogId: z.string().uuid("Please login in first to publish"),
+  UserId: z.string().uuid("Please login in first to publish").optional(),
   replyingto: z.boolean(),
+  blogAuthor:z.string().uuid("Please login in first to publish").optional(),
 });
 
 export const profileUpdateSchema = z.object({

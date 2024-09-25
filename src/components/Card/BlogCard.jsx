@@ -2,12 +2,13 @@ import { formatDate } from "@/utils/format";
 import { Tag } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { MdFavoriteBorder } from "react-icons/md";
 
 const BlogCard = ({ blog }) => {
-  const { title, banner, description, createdAt, id, Tag } = blog;
+  const { title, banner, description, createdAt, id, Tag,like_count } = blog;
   const { firstName, lastName, profileImage, username } = blog.profile;
- 
+  const isLiked = blog.Favourite;
   return (
     <article>
       <Link
@@ -39,8 +40,13 @@ const BlogCard = ({ blog }) => {
               {Tag[0].charAt(0).toUpperCase() + Tag[0].slice(1).toLowerCase()}
             </span>
             <span className="ml-3 flex items-center gap-2 text-gray-500">
-              <MdFavoriteBorder />
-              {3}
+             
+              {isLiked&&isLiked.length ? (
+                <FaHeart className="text-red-500" />
+              ) : (
+                <FaRegHeart />
+              )}
+              {like_count?like_count:""}
             </span>
           </div>
         </div>
