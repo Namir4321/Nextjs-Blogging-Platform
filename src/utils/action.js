@@ -497,6 +497,7 @@ export const AddCommentAction = async (prevState, formData) => {
     const rawData = Object.fromEntries(formData);
     rawData.replyingto = rawData.replyingto === "true";
     const data = { ...rawData, profileId };
+    console.log(data);
     const validateFields = await validateWithZodSchema(commentSchema, data);
     const comm = await db.comment.create({
       data: {
@@ -511,15 +512,17 @@ export const AddCommentAction = async (prevState, formData) => {
       data: { comment_count: { increment: 1 } },
       select: { profileId: true },
     });
-    await db.notification.create({
-      data: {
-        type: "comment",
-        blogId: validateFields.blogId,
-        profileId: validateFields.UserId,
-        notificationId: validateFields.profileId,
-        commentId: comm.id,
-      },
-    });
+    if (profileId !== validateFields.UserId) {
+      await db.notification.create({
+        data: {
+          type: "comment",
+          blogId: validateFields.blogId,
+          profileId: validateFields.profileId,
+          notificationId: validateFields.UserId,
+          commentId: comm.id,
+        },
+      });
+    }
     revalidatePath(`/blog/${rawData.blogId}`);
     return { message: "comment posted" };
   } catch (err) {
@@ -536,7 +539,6 @@ export const fetchComment = async (blogId, take, skip) => {
       where: { blogId: blogId, replyingto: false },
       select: {
         id: true,
-        blogId: true,
         comment: true,
         replyingto: true,
         profileId: true,
@@ -548,6 +550,12 @@ export const fetchComment = async (blogId, take, skip) => {
             profileImage: true,
             username: true,
             id: true,
+          },
+        },
+        blog: {
+          select: {
+            id: true,
+            profileId: true,
           },
         },
       },
@@ -563,7 +571,9 @@ export const postCommentReply = async (prevState, formData) => {
     const rawData = Object.fromEntries(formData);
     rawData.replyingto = rawData.replyingto === "true";
     const data = { ...rawData, profileId };
+    console.log(data);
     const validateFields = await validateWithZodSchema(commentSchema, data);
+
     const comma = await db.comment.update({
       where: { id: rawData.parentId },
       data: {
@@ -576,16 +586,29 @@ export const postCommentReply = async (prevState, formData) => {
           },
         },
       },
-    });
-
-    await db.notification.create({
-      data: {
-        type: "reply",
-        blogId: validateFields.blogId,
-        profileId: profileId,
-        notificationId: validateFields.blogAuthor,
+      select: {
+        children: {
+          select: { id: true },
+          orderBy: { createdAt: "desc" },
+          take: 1,
+        },
       },
     });
+    // const newChildId = comma.children[0].id;
+    // console.log(newChildId);
+
+    if (validateFields.blogAuthor !== profileId) {
+      const replycomment = await db.notification.create({
+        data: {
+          type: "reply",
+          blogId: validateFields.blogId,
+          profileId: profileId,
+          notificationId: validateFields.blogAuthor,
+          commentId: comma.children[0].id,
+        },
+      });
+      console.log(replycomment);
+    }
 
     revalidatePath(`/blog/${validateFields.blogId}`);
   } catch (err) {
@@ -606,7 +629,6 @@ export const fetchCommentReply = async (commentId, take, skip) => {
       select: {
         id: true,
         comment: true,
-        blogId: true,
         createdAt: true,
         updatedAt: true,
         profile: {
@@ -617,8 +639,15 @@ export const fetchCommentReply = async (commentId, take, skip) => {
             username: true,
           },
         },
+        blog: {
+          select: {
+            id: true,
+            profileId: true,
+          },
+        },
       },
     });
+    console.log(comment);
     return comment;
   } catch (err) {
     console.log(err);
@@ -634,14 +663,16 @@ export const postDeleteReply = async (id, blogId, main, blogAuthor) => {
       },
     });
     if (main === "reply comment") {
-      await db.notification.deleteMany({
-        where: {
-          blogId: blogId,
-          notificationId: user,
-          profileId: blogAuthor,
-          type: "reply",
-        },
-      });
+      if (blogAuthor !== user) {
+        await db.notification.deleteMany({
+          where: {
+            blogId: blogId,
+            notificationId: user,
+            profileId: blogAuthor,
+            type: "reply",
+          },
+        });
+      }
     }
     if (main === "main comment") {
       await db.blog.update({
@@ -649,15 +680,16 @@ export const postDeleteReply = async (id, blogId, main, blogAuthor) => {
         data: { comment_count: { increment: -1 } },
         select: { profileId: true },
       });
-
-      await db.notification.deleteMany({
-        where: {
-          blogId: blogId,
-          notificationId: user,
-          profileId: blogAuthor,
-          type: "comment",
-        },
-      });
+      if (blogAuthor !== user) {
+        await db.notification.deleteMany({
+          where: {
+            blogId: blogId,
+            notificationId: user,
+            profileId: blogAuthor,
+            type: "comment",
+          },
+        });
+      }
       revalidatePath(`/blog/${blogId}`);
       return res;
     }
@@ -747,11 +779,79 @@ export const UpdateProfileAction = async (prevState, formData) => {
 
 export const fetchNotification = async () => {
   const userId = await getAuthUser();
+  // const take = 1;
+  // const skip = 4;
+  if (!userId) return;
+  const notified = await db.notification.findMany({
+    // skip,
+    where: {
+      notificationId: userId,
+      seen: false,
+    },
+    select: {
+      id: true,
+      type: true,
+
+      profile: {
+        select: {
+          firstName: true,
+          lastName: true,
+          profileImage: true,
+          username: true,
+        },
+      },
+      comment:{
+        select:{
+          id:true,
+          comment:true,
+          createdAt:true,
+        }
+      },
+      blog:{
+        select:{
+          title:true,
+          id:true
+        }
+      }
+    },
+  });
+  // console.log(notified)
+  return notified;
+};
+
+export const fetchCommentNotification = async (type) => {
+  const userId = await getAuthUser();
   if (!userId) return;
   const notified = await db.notification.findMany({
     where: {
       notificationId: userId,
       seen: false,
+      type: type,
+    },
+    select: {
+      id: true,
+      type: true,
+      profile: {
+        select: {
+          firstName: true,
+          lastName: true,
+          profileImage: true,
+          username: true,
+        },
+      },
+      comment: {
+        select: {
+          id: true,
+          comment: true,
+          replyingto: true,
+          profileId: true,
+          createdAt: true,
+        },
+      },
+      blog:{
+        id:true,
+        title:true,
+      }
     },
   });
   return notified;

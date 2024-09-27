@@ -1,10 +1,10 @@
 export const formatDate=(date,onlyMonth)=>{
 const options={
-    year:"numeric",
-    month:"long"
+    year:"2-digit",
+    month:"short"
 }
 if(!onlyMonth){
-    options.day="numeric"
+    year="short"
 }
 return new Intl.DateTimeFormat("en-US",options).format(date)
 }

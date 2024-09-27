@@ -8,6 +8,7 @@ import { FaRegCommentDots } from "react-icons/fa";
 import { MdOutlineDelete } from "react-icons/md";
 const CommentReply = ({ comment, setISshow, setRefresh }) => {
   const [show, setShow] = useState(false);
+  console.log(comment);
   const handleDeleteComment = async (Id, blogId) => {
     try {
       const main = "main comment";
@@ -58,16 +59,15 @@ const CommentReply = ({ comment, setISshow, setRefresh }) => {
       </div>
       {show && (
         <div>
-         
           <FormContainer action={postCommentReply}>
             <TextAreaInput row="2" name="comment" labelText=" " />
-            <input type="hidden" name="blogId" value={comment.blogId} />
+            <input type="hidden" name="blogId" value={comment.blog.id} />
             <input type="hidden" name="replyingto" value="true" />
             <input type="hidden" name="parentId" value={comment.id} />
             <input
               type="hidden"
               name="blogAuthor"
-              value={comment.profile.id}
+              value={comment.blog.profileId}
             />
 
             <ButtonProp

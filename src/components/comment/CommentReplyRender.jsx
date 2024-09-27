@@ -20,23 +20,24 @@ const CommentReplyRender = ({ commentId }) => {
     try {
       const main = "reply comment";
       const deletereply = await postDeleteReply(id, blogId, main, blogAuthor);
-
       setRefresh((prevState) => !prevState);
     } catch (err) {
       console.error("Failed to delete reply:", err);
     }
   };
-
-  console.log(refresh);
+  console.log(replycomments);
   useEffect(() => {
     const fetchComments = async () => {
       setLoading(true);
       try {
         const newComments = await fetchCommentReply(commentId, take, skip);
         if (refresh || skip === 0) {
-         setIsReplyingComment(newComments); 
+          setIsReplyingComment(newComments);
         } else {
-         setIsReplyingComment((prevComments) => [...prevComments, ...newComments]); // Append to the existing list if not refreshing
+          setIsReplyingComment((prevComments) => [
+            ...prevComments,
+            ...newComments,
+          ]);
         }
       } catch (err) {
         console.error(err);
@@ -74,7 +75,11 @@ const CommentReplyRender = ({ commentId }) => {
                   variant="ghost"
                   className=" text-red-600"
                   onClick={() =>
-                    handleDeleteComment(comment.id, comment.blogId,comment.profile.id)
+                    handleDeleteComment(
+                      comment.id,
+                      comment.blog.id,
+                      comment.profile.id
+                    )
                   }
                 >
                   <MdOutlineDelete className="text-xl" />
