@@ -1,9 +1,9 @@
-export const formatDate=(date,onlyMonth)=>{
+export const formatDate=(date,year)=>{
 const options={
     year:"2-digit",
     month:"short"
 }
-if(!onlyMonth){
+if(!year){
     year="short"
 }
 return new Intl.DateTimeFormat("en-US",options).format(date)

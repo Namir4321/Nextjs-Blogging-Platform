@@ -2,8 +2,7 @@ import { ButtonProp } from "@/components/form/ButtonProp";
 import Navlogo from "@/components/Navbar/NavLogo";
 import EditButton from "@/components/editor/EditButton";
 import Preview from "@/components/preview/Preview";
-import Link from "next/link";
-import PreviewPage from "@/app/preview/page";
+
 
 
 const EditNavbar = ({blog}) => {

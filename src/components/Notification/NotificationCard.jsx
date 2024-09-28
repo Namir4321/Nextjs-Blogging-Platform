@@ -53,7 +53,7 @@ const NotificationCard = ({ notification }) => {
           ""
         )}
         <div className="ml-14 pl-5 mt-3 text-gray-500 flex gap-8">
-          <p>{formatDate(notification.comment.createdAt, "month")}</p>
+          <p>{formatDate(notification.comment.createdAt, "year")}</p>
           {notification.type !== "like" ? (
             <>
               <button className="underline hover:text-black">Reply</button>
