@@ -7,7 +7,7 @@ const EditorPage = () => {
   const updateValue = useSelector((state) => state.updateReducer.banner);
    const updatetitle = useSelector((state) => state.updateReducer.title);
   const updateContent = useSelector((state) => state.updateReducer.content);
-  console.log(updateContent)
+ 
   return (
     <div className=" container relative ">
       <div className="mx-auto flex flex-col h-full sm:max-h-[60vh] max-h-[30vh] overflow-y-auto no-scrollbar">

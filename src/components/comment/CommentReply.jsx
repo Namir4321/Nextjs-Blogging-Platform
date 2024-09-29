@@ -8,7 +8,7 @@ import { FaRegCommentDots } from "react-icons/fa";
 import { MdOutlineDelete } from "react-icons/md";
 const CommentReply = ({ comment, setISshow, setRefresh }) => {
   const [show, setShow] = useState(false);
-  console.log(comment);
+  
   const handleDeleteComment = async (Id, blogId) => {
     try {
       const main = "main comment";

@@ -10,6 +10,7 @@ import EditorRedux from "../EditorDiv/EditorRedux";
 
 const Blog = async ({ blogId }) => {
   const blog = await fetchSingleBlogPost(blogId);
+
   return (
     <div className="flex justify-center items-center">
       <div className="w-full max-w-[900px] center  py-5  max-lg:px-[5vw]">

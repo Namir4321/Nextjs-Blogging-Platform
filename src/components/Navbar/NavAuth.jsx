@@ -9,7 +9,7 @@ import NavLink from "@/components/Navbar/NavLink";
 import Link from "next/link";
 const NavAuth = async () => {
   const isLoggedIn = await getAuthUser();
-  const notification = await fetchNotification();
+  const notification = await fetchNotification("seen");
 
   return (
     <div className="flex gap-4">

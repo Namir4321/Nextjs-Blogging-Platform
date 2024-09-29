@@ -1,11 +1,17 @@
-import { formatDate } from "@/utils/format";
 import Image from "next/image";
 import Link from "next/link";
+import { Button } from "../ui/button";
+import ReplyCard from "@/components/Notification/ReplyCard";
 
-const NotificationCard = ({ notification }) => {
+const NotificationCard = ({ notification,userId }) => {
+  console.log(notification)
   return (
-    <div className="" key={notification.id}>
-      <div className="p-6 border-b border-gray-100 border-1-black">
+    <div className="mt-2" key={notification.id}>
+      <div
+        className={`p-6 border-b border-gray-100 border  ${
+          notification.seen == false ? "border-l-black border-l-2" : ""
+        }`}
+      >
         <div className="flex gap-5 mb-3">
           <Image
             src={notification.profile.profileImage}
@@ -45,24 +51,14 @@ const NotificationCard = ({ notification }) => {
             )}
           </div>
         </div>
-        {notification.type !== "like" ? (
+        {notification.type !== "like" && notification.comment ? (
           <p className="ml-14 pl-5 font-sarif text-xl my-5">
             {notification.comment.comment}
           </p>
         ) : (
           ""
         )}
-        <div className="ml-14 pl-5 mt-3 text-gray-500 flex gap-8">
-          <p>{formatDate(notification.comment.createdAt, "year")}</p>
-          {notification.type !== "like" ? (
-            <>
-              <button className="underline hover:text-black">Reply</button>
-              <button className="underline hover:text-black">Delete</button>
-            </>
-          ) : (
-            ""
-          )}
-        </div>
+        <ReplyCard notification={notification} userId={userId} />
       </div>
     </div>
   );

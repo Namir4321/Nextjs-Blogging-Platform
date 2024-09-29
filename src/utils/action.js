@@ -476,12 +476,13 @@ export const toggleFavouriteAction = async ({
         where: { id: blogId },
         data: { like_count: { increment: 1 } },
       });
+      console.log(blogId, favouriteId, pathname, blogAuthor);
       await db.notification.create({
         data: {
           type: "like",
           blogId: blogId,
-          profileId: blogAuthor,
-          notificationId: user,
+          notificationId: blogAuthor,
+          profileId: user,
         },
       });
     }
@@ -607,7 +608,6 @@ export const postCommentReply = async (prevState, formData) => {
           commentId: comma.children[0].id,
         },
       });
-      console.log(replycomment);
     }
 
     revalidatePath(`/blog/${validateFields.blogId}`);
@@ -647,7 +647,6 @@ export const fetchCommentReply = async (commentId, take, skip) => {
         },
       },
     });
-    console.log(comment);
     return comment;
   } catch (err) {
     console.log(err);
@@ -655,6 +654,7 @@ export const fetchCommentReply = async (commentId, take, skip) => {
 };
 
 export const postDeleteReply = async (id, blogId, main, blogAuthor) => {
+  console.log(id);
   try {
     const user = await getAuthUser();
     const res = await db.comment.delete({
@@ -777,21 +777,25 @@ export const UpdateProfileAction = async (prevState, formData) => {
   revalidatePath("/setting/edit-profile");
 };
 
-export const fetchNotification = async () => {
+export const fetchNotification = async (seenFilter) => {
   const userId = await getAuthUser();
+   const whereConditions = {
+     notificationId: userId,
+   };
+
+   if (seenFilter) {
+     whereConditions.seen = seenFilter === "false";
+    }
   // const take = 1;
   // const skip = 4;
   if (!userId) return;
   const notified = await db.notification.findMany({
     // skip,
-    where: {
-      notificationId: userId,
-      seen: false,
-    },
+    where: whereConditions,
     select: {
       id: true,
       type: true,
-
+      seen: true,
       profile: {
         select: {
           firstName: true,
@@ -800,22 +804,32 @@ export const fetchNotification = async () => {
           username: true,
         },
       },
-      comment:{
-        select:{
-          id:true,
-          comment:true,
-          createdAt:true,
-        }
+      comment: {
+        select: {
+          id: true,
+          comment: true,
+          createdAt: true,
+          children: true,
+        },
       },
-      blog:{
-        select:{
-          title:true,
-          id:true
-        }
-      }
+      blog: {
+        select: {
+          title: true,
+          id: true,
+          profileId: true,
+        },
+      },
     },
   });
-  // console.log(notified)
+  await db.notification.updateMany({
+    where: {
+      notificationId: userId,
+    },
+    data: {
+      seen: true,
+    },
+  });
+
   return notified;
 };
 
@@ -831,6 +845,7 @@ export const fetchCommentNotification = async (type) => {
     select: {
       id: true,
       type: true,
+
       profile: {
         select: {
           firstName: true,
@@ -843,16 +858,40 @@ export const fetchCommentNotification = async (type) => {
         select: {
           id: true,
           comment: true,
-          replyingto: true,
-          profileId: true,
           createdAt: true,
+          children: true,
         },
       },
-      blog:{
-        id:true,
-        title:true,
-      }
+      blog: {
+        select: {
+          title: true,
+          id: true,
+          profileId: true,
+        },
+      },
     },
   });
   return notified;
+};
+export const fetchSingleComment = async (id) => {
+  console.log(id);
+  const fetchComment = await db.comment.findUnique({
+    where: { id: id },
+    select: {
+      id: true,
+      blog: true,
+      comment: true,
+      replyingto: true,
+      profile: true,
+      children: {
+        select: {
+          id: true,
+          blog: true,
+          comment: true,
+          profile: true,
+        },
+      },
+    },
+  });
+  return fetchComment;
 };

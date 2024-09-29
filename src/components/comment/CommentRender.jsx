@@ -38,7 +38,7 @@ const CommentRender = ({ blogId }) => {
 
     fetchComments();
   }, [blogId, take, skip,refresh]);
-console.log(refresh)
+
   if (!comments.length) {
     return <div className="mt-5">No comments</div>;
   }

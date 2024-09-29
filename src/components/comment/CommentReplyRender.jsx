@@ -25,7 +25,7 @@ const CommentReplyRender = ({ commentId }) => {
       console.error("Failed to delete reply:", err);
     }
   };
-  console.log(replycomments);
+ 
   useEffect(() => {
     const fetchComments = async () => {
       setLoading(true);

@@ -11,7 +11,7 @@ const updateSlice = createSlice({
   initialState,
   reducers: {
     addblogUpdateEdit: (state, action) => {
-      console.log(action.payload);
+     
       const { title, banner, content, Tag, description } = action.payload;
       state.title = title;
       state.banner = banner;

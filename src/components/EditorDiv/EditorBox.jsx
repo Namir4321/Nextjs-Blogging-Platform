@@ -8,7 +8,6 @@ import { updateContentEdit } from "@/redux/Updateslice";
 const EditorBox = ({ defaultValue, id, readOnly, edit }) => {
   const dispatch = useDispatch();
   const ref = useRef(null);
-  console.log(edit);
 
   useEffect(() => {
     if (!ref.current) {
@@ -22,7 +21,6 @@ const EditorBox = ({ defaultValue, id, readOnly, edit }) => {
           const content = await api.saver.save();
           const safeContent = JSON.parse(JSON.stringify(content));
           if (edit) {
-            console.log(edit)
             dispatch(updateContentEdit(safeContent));
           } else {
             dispatch(updateContent(safeContent));
