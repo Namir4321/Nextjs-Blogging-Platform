@@ -101,6 +101,8 @@ export const fetchBlogAction = async () => {
           createdAt: true,
           Tag: true,
           like_count: true,
+          comment_count: true,
+          read_count: true,
           profile: {
             select: {
               firstName: true,
@@ -779,13 +781,13 @@ export const UpdateProfileAction = async (prevState, formData) => {
 
 export const fetchNotification = async (seenFilter) => {
   const userId = await getAuthUser();
-   const whereConditions = {
-     notificationId: userId,
-   };
+  const whereConditions = {
+    notificationId: userId,
+  };
 
-   if (seenFilter) {
-     whereConditions.seen = seenFilter === "false";
-    }
+  if (seenFilter) {
+    whereConditions.seen = seenFilter === "false";
+  }
   // const take = 1;
   // const skip = 4;
   if (!userId) return;
@@ -894,4 +896,64 @@ export const fetchSingleComment = async (id) => {
     },
   });
   return fetchComment;
+};
+export const fetchBlogFilterAction = async (draftFilter) => {
+  const userId = await getAuthUser();
+  try {
+    if (userId) {
+      const blogs = await db.blog.findMany({
+        where: { draft: draftFilter },
+        select: {
+          id: true,
+          title: true,
+          banner: true,
+          description: true,
+          content: true,
+          createdAt: true,
+          Tag: true,
+          like_count: true,
+          comment_count: true,
+          read_count: true,
+          profile: {
+            select: {
+              firstName: true,
+              lastName: true,
+              profileImage: true,
+              username: true,
+              id: true,
+            },
+          },
+          Favourite: {
+            where: { profileId: userId },
+            select: { blogId: true },
+          },
+        },
+      });
+      return blogs;
+    }
+    const blogs = await db.blog.findMany({
+      select: {
+        id: true,
+        title: true,
+        banner: true,
+        description: true,
+        content: true,
+        createdAt: true,
+        Tag: true,
+        like_count: true,
+        profile: {
+          select: {
+            firstName: true,
+            lastName: true,
+            profileImage: true,
+            username: true,
+            id: true,
+          },
+        },
+      },
+    });
+    return blogs;
+  } catch (err) {
+    console.log(err);
+  }
 };

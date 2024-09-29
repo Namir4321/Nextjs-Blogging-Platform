@@ -62,7 +62,7 @@ const SideNav = () => {
             Notification
           </Link>
           <Link
-            href="/dashboard"
+            href="/setting/blogs"
             className="sidebar-link link"
             onClick={(e) => setPageState(e.target.innerText)}
           >
