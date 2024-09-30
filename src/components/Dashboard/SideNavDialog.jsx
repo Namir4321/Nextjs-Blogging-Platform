@@ -19,7 +19,7 @@ const SideNavDialog = ({ pageState, setShowSideNav, pageStateTab }) => {
   };
 
   return (
-    <div className="md:hidden gap-4 bg-white py-1  flex flex-nowrap overflow-x-hidden">
+    <div className="md:hidden gap-4 bg-white dark:bg-background  py-1  flex flex-nowrap overflow-x-hidden">
       <Button
         ref={sideBarIcon}
         variant="icon"

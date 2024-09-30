@@ -36,10 +36,10 @@ const BlogCard = ({ blog }) => {
             {description}
           </p>
           <div className="flex gap-4 mt-7">
-            <span className="btn-dark bg-gray-200 rounded-xl text-xs text-black py-1 px-4">
+            <span className="btn-dark bg-gray-200 dark:bg-muted rounded-xl text-xs text-black dark:text-white py-1 px-4">
               {Tag[0].charAt(0).toUpperCase() + Tag[0].slice(1).toLowerCase()}
             </span>
-            <span className="ml-3 flex items-center gap-2 text-gray-500">
+            <span className="ml-3 flex items-center gap-2 text-gray-500 dark:text-white">
              
               {isLiked&&isLiked.length ? (
                 <FaHeart className="text-red-500" />

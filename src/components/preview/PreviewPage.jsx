@@ -15,20 +15,17 @@ const PreviewPage = ({blog,iseditMode}) => {
     <div className="container">
       <div className="mx-auto flex flex-col h-full sm:max-h-full max-h-[30vh] overflow-y-auto no-scrollbar">
         <TitleInput
-          className="bg-gray-200 text-xl"
+          className="bg-gray-200 text-xl dark:bg-muted"
           row="1"
           labelText="Blog Title"
           title="name"
           iseditMode={iseditMode}
         />
         <DescriptionInput
-          className="text-sm"
+          className="text-sm dark:bg-muted"
           iseditMode={iseditMode}
         />
-        <TagsInput
-          iseditMode={iseditMode}
-          blog={blog}
-        />
+        <TagsInput iseditMode={iseditMode} blog={blog} />
       </div>
     </div>
   );

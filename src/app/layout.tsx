@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar/Navbar";
 import { Providers } from "@/redux/provider";
 import { Toaster } from "@/components/ui/toaster";
+import DarkProvider from "@/app/darkprovider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -19,11 +20,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Toaster />
-        <Providers>
-          <Navbar />
-          {children}
-        </Providers>
+        <DarkProvider>
+          <Providers>
+            <Navbar />
+            <main className="container py-10">{children}</main>
+          </Providers>
+        </DarkProvider>
       </body>
     </html>
   );

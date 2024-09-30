@@ -17,15 +17,15 @@ const EditorBanner = async ({ iseditMode }) => {
       <div className="mx-auto mt-4 max-w-[900px]">
         <BlogImageContainer iseditMode={iseditMode} />
         <TitleInput
-          className="w-full  text-xl sm:text-2xl"
+          className="w-full  text-xl sm:text-2xl "
           row="3"
           labelText=" "
           iseditMode={iseditMode}
         />
-        <hr className="w-full border-t border-gray-200" />
+        <hr className="w-full border-t border-gray-200 dark:border-muted" />
         <EditorRedux
           name="content"
-          className="w-full"
+          className="w-full dark:text-white"
           id="editorjs"
           iseditMode={iseditMode}
         />

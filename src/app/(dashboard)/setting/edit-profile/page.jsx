@@ -35,7 +35,7 @@ const page = async () => {
         <div className="w-full p-4">
           <div className="grid grid-cols-1 md:grid-cols-2 md:gap-5 ">
             <FormInput
-              className="mb-4 bg-gray-100 text-black pl-7 hover:bg-white outline-none focus-visible:ring-0"
+              className="mb-4 bg-gray-100 dark:bg-muted dark:text-white text-black pl-7 hover:bg-white outline-none focus-visible:ring-0"
               id="change-password"
               disabled={true}
               name="oldpassword"
@@ -47,7 +47,7 @@ const page = async () => {
               icon={<FaRegUser />}
             />
             <FormInput
-              className="mb-4 bg-gray-100 text-black pl-7 hover:bg-white outline-none focus-visible:ring-0"
+              className="mb-4 bg-gray-100 text-black pl-7 dark:bg-muted dark:text-white hover:bg-white outline-none focus-visible:ring-0"
               id="change-password"
               disabled={true}
               name="oldpassword"
@@ -61,7 +61,7 @@ const page = async () => {
           </div>
           <FormContainer action={UpdateProfileAction}>
             <FormInput
-              className="mb-4 bg-gray-100 text-black pl-7 hover:bg-white outline-none focus-visible:ring-0"
+              className="mb-4 bg-gray-100 text-black pl-7 dark:bg-muted dark:text-white hover:bg-white outline-none focus-visible:ring-0"
               id="change-password"
               // disabled={true}
               name="username"
@@ -76,7 +76,7 @@ const page = async () => {
               name="Bio"
               labelText=" "
               defaultValue={profile.bio}
-              className="mb-4 bg-gray-100 text-black pl-7 hover:bg-white outline-none focus-visible:ring-0"
+              className="mb-4 bg-gray-100 text-black pl-7 dark:bg-muted dark:text-white hover:bg-white outline-none focus-visible:ring-0"
               row="5"
             />
             <p className="text-muted-foreground mb-4 mt-4">
@@ -84,7 +84,7 @@ const page = async () => {
             </p>
             <div className="grid mt-4 grid-cols-1 md:grid-cols-2 md:gap-5 mb-4 gap-4 ">
               <FormInput
-                className=" bg-gray-100 text-black pl-7 hover:bg-white outline-none focus-visible:ring-0"
+                className=" bg-gray-100 text-black pl-7 dark:bg-muted dark:text-white hover:bg-white outline-none focus-visible:ring-0"
                 id="youtube"
                 name="youtube"
                 type="text"
@@ -95,7 +95,7 @@ const page = async () => {
                 icon={<FaYoutube />}
               />
               <FormInput
-                className=" bg-gray-100 text-black pl-7 hover:bg-white outline-none focus-visible:ring-0"
+                className=" bg-gray-100 text-black pl-7 dark:bg-muted dark:text-white hover:bg-white outline-none focus-visible:ring-0"
                 id="instagram"
                 name="instagram"
                 type="text"
@@ -106,7 +106,7 @@ const page = async () => {
                 icon={<FaInstagram />}
               />
               <FormInput
-                className=" bg-gray-100 text-black pl-7 hover:bg-white outline-none focus-visible:ring-0"
+                className=" bg-gray-100 text-black pl-7 dark:bg-muted dark:text-white hover:bg-white outline-none focus-visible:ring-0"
                 id="facebook"
                 name="facebook"
                 type="text"
@@ -117,7 +117,7 @@ const page = async () => {
                 icon={<FaFacebookF />}
               />
               <FormInput
-                className=" bg-gray-100 text-black pl-7 hover:bg-white outline-none focus-visible:ring-0"
+                className=" bg-gray-100 text-black pl-7 dark:bg-muted dark:text-white hover:bg-white outline-none focus-visible:ring-0"
                 id="twitter"
                 name="twitter"
                 type="text"
@@ -128,7 +128,7 @@ const page = async () => {
                 icon={<FaXTwitter />}
               />
               <FormInput
-                className=" bg-gray-100 text-black pl-7 hover:bg-white outline-none focus-visible:ring-0"
+                className=" bg-gray-100 text-black pl-7 dark:bg-muted dark:text-white hover:bg-white outline-none focus-visible:ring-0"
                 id="github"
                 name="github"
                 type="text"
@@ -139,7 +139,7 @@ const page = async () => {
                 icon={<FaGithub />}
               />
               <FormInput
-                className=" bg-gray-100 text-black pl-7 hover:bg-white outline-none focus-visible:ring-0"
+                className=" bg-gray-100 text-black pl-7 dark:bg-muted dark:text-white hover:bg-white outline-none focus-visible:ring-0"
                 id="website"
                 name="website"
                 type="text"

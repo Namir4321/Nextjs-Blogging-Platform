@@ -19,7 +19,7 @@ const NavAuth = async () => {
             variant="ghost"
             type="button"
             btnsize="icon"
-            className="rounded-full bg-slate-200 m-0 p-2"
+            className="rounded-full bg-slate-200 dark:bg-muted m-0 p-2"
           >
             <Link href="/setting/notification">
               {notification.length > 0 && (

@@ -28,14 +28,14 @@ const TagsInput = ({ blog, iseditMode }) => {
   return (
     <div className="rounded">
       <p>Topic - (Helps in Searching and ranking blog)</p>
-      <div className="relative pl-2 py-2 pb-4 bg-gray-200 rounded">
+      <div className="relative pl-2 py-2 pb-4 bg-gray-200 dark:bg-muted rounded">
         <FormInput
           label=" "
           name="tag"
           type="text"
           placeholder="Topic"
           onKeyDown={handleKeyDown}
-          className="sticky input-box bg-white top-0 left-0 pl-4 mb-3 focus:bg-white"
+          className="sticky input-box  bg-white top-0 left-0 pl-4 mb-3 dark:bg-muted focus:bg-white"
         />
 
         {TagValue.map((tag, i) => {

@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import EditblogButton from "@/components/BlogView/EditblogButton";
 import FormContainer from "../form/FormContainer";
 import { DeleteBlogAction } from "@/utils/action";
+import DeleteCard from "@/components/Card/DeleteCard";
 
 const DraftCard = ({ Blog, index }) => {
   return (
@@ -19,22 +20,10 @@ const DraftCard = ({ Blog, index }) => {
         </p>
         <div className="flex gap-6 mt-3">
           <EditblogButton blog={Blog} className="underline  mt-1" />
-
-          <DeleteRental BlogId={Blog.id} />
+          <DeleteCard BlogId={Blog.id} />
         </div>
       </div>
     </div>
   );
 };
-const DeleteRental = async ({ BlogId }) => {
-  const DeleteBlogPostAction = DeleteBlogAction.bind(null, { BlogId });
-  return (
-    <FormContainer action={DeleteBlogPostAction}>
-      <Button className="text-red-500 underline" variant="icon" size="default">
-        Delete
-      </Button>
-    </FormContainer>
-  );
-};
-
-export default DraftCard;
+export default DraftCard

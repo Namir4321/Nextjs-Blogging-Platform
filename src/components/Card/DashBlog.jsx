@@ -7,13 +7,13 @@ import { Button } from "../ui/button";
 import StatusCard from "@/components/Card/StatusCard";
 import BlogStatusCard from "./BlogStatusCard";
 import EditblogButton from "@/components/BlogView/EditblogButton";
-import { DeleteBlogAction } from "@/utils/action";
 import FormContainer from "../form/FormContainer";
+import DeleteCard from "@/components/Card/DeleteCard"
 const DashBlog = ({ Blog }) => {
   const [show, setShow] = useState(false);
   return (
     <>
-      <div className=" flex gap-10 border-b mb-6 max-md:px-4 border-gray-50 pb-6 items-center">
+      <div className=" flex gap-10 border-b mb-6 max-md:px-4 border-gray-50 dark:border-muted pb-6 items-center">
         <Image
           src={Blog.banner}
           alt="blog.title"
@@ -33,7 +33,7 @@ const DashBlog = ({ Blog }) => {
               Published on {formatDate(Blog.createdAt)}
             </p>
           </div>
-          <div className="flex gap-6 mt-3   ">
+          <div className="flex gap-6 mt-4   ">
             <EditblogButton blog={Blog} className="underline  mt-1" />
 
             <Button
@@ -44,7 +44,7 @@ const DashBlog = ({ Blog }) => {
             >
               Stats
             </Button>
-            <DeleteRental BlogId={Blog.id} />
+            <DeleteCard BlogId={Blog.id}/>
           </div>
         </div>
         <div className="max-lg:hidden ">
@@ -61,14 +61,5 @@ const DashBlog = ({ Blog }) => {
     </>
   );
 };
-const DeleteRental = async ({ BlogId }) => {
-  const DeleteBlogPostAction = DeleteBlogAction.bind(null, { BlogId });
-  return (
-    <FormContainer action={DeleteBlogPostAction}>
-      <Button className="text-red-500 underline" variant="icon" size="default">
-        Delete
-      </Button>
-    </FormContainer>
-  );
-};
+
 export default DashBlog;

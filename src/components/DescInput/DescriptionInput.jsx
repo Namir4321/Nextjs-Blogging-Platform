@@ -19,7 +19,7 @@ const DescriptionInput = ({ className, labelText, title, row, iseditMode }) => {
   return (
     <div className="rounded mt-3">
       <p>Short Descrption about your blog</p>
-      <div className="relative pl-2 py-2 pb-4 bg-gray-200 rounded-md">
+      <div className="relative pl-2 py-2 pb-4 dark:bg-muted bg-gray-200 rounded-md">
         <TextAreaInput
           labelText={labelText}
           name={title}

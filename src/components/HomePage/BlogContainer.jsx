@@ -44,7 +44,7 @@ const BlogContainer = ({ selectedTag }) => {
   }
   if (blogs.length === 0) {
     return (
-      <h6 className="flex items-center justify-center bg-gray-100 ">
+      <h6 className="flex items-center justify-center bg-gray-100 dark:bg-muted  ">
         No blogs published for the selected category...
       </h6>
     );

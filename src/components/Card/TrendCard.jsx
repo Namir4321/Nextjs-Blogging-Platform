@@ -8,7 +8,7 @@ const TrendCard = ({ blog, index }) => {
   return (
     <>
       <Link href={`/blog/${id}`} className="flex gap-5 mb-8">
-        <h1 className="text-5xl mt-1 sm:text-4xl lg:text-7xl font-bold text-gray-300 leading-none">
+        <h1 className="text-5xl mt-1 sm:text-4xl lg:text-7xl font-bold text-gray-300 dark:text-muted-foreground leading-none">
           {index < 10 ? "0" + (index + 1) : index}
         </h1>
         <div>

@@ -28,7 +28,7 @@ const TrendingContainer = () => {
   }
 
   if (blogs.length === 0) {
-    return <h6>No trending blogs found</h6>;
+    return <h6 className="">No trending blogs found</h6>;
   }
 
   return <TrendingList blogs={blogs} />;

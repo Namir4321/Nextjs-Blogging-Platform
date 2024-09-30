@@ -18,9 +18,9 @@ const BlogList = ({ blogs }) => {
       {visibleBlogs < blogs.length && (
         <div className="flex  mt-8">
           <Button
-            className="px-4 py-2 bg-gray-100  rounded mb-6"
+            className="px-4 py-2   rounded-lg mb-6"
             onClick={loadMoreBlogs}
-            variant="ghost"
+            variant="outline"
           >
             Load More
           </Button>

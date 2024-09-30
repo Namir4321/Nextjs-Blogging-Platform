@@ -30,18 +30,21 @@ import {
 import { handleReset, handleResetEdit } from "@/utils/reduxHelper";
 import { redirect } from "next/navigation";
 import { VscPreview } from "react-icons/vsc";
+import { useState } from "react";
 
 const Preview = ({ blog, iseditMode }) => {
   const { toast } = useToast();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const reduxData = useSelector((state) => state.blogReducer);
   const updatedRedux = useSelector((state) => state.updateReducer);
   const handlereduxdata = async () => {
     try {
+      setLoading(true);
       if (blog) {
         const profileId = await getAuthUser();
         const data = { ...updatedRedux, profileId };
-        console.log(blog)
+        console.log(blog);
         const validateFields = await validateWithZodSchema(BlogSchema, data);
         const submitBlog = await EditBlogAction(validateFields, blog);
         const reset = await handleResetEdit(dispatch);
@@ -56,22 +59,31 @@ const Preview = ({ blog, iseditMode }) => {
       console.log(err);
       toast({ variant: "destructive", description: err.message });
       return { messge: err.message };
+      setLoading(false);
     }
   };
 
   const handlesavedraft = async () => {
-    if (blog) {
-      const profileId = await getAuthUser();
-      const data = { ...updatedRedux, profileId, draft: true };
-      const validateFields = await validateWithZodSchema(DraftSchema, data);
-      const submitBlog = await UpdateDraftAction(validateFields,blog);
-    const reset = await handleResetEdit(dispatch);
-    } else {
-      const profileId = await getAuthUser();
-      const data = { ...reduxData, profileId, draft: true };
-      const validateFields = await validateWithZodSchema(DraftSchema, data);
-      const submitBlog = await createDraftAction(validateFields);
-      const reset = await handleReset(dispatch);
+    try {
+      setLoading(true);
+      if (blog) {
+        const profileId = await getAuthUser();
+        const data = { ...updatedRedux, profileId, draft: true };
+        const validateFields = await validateWithZodSchema(DraftSchema, data);
+        const submitBlog = await UpdateDraftAction(validateFields, blog);
+        const reset = await handleResetEdit(dispatch);
+      } else {
+        const profileId = await getAuthUser();
+        const data = { ...reduxData, profileId, draft: true };
+        const validateFields = await validateWithZodSchema(DraftSchema, data);
+        const submitBlog = await createDraftAction(validateFields);
+        const reset = await handleReset(dispatch);
+      }
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
+      toast({ variant: "destructive", description: err.message });
+      return { messge: err.message };
     }
   };
   return (
@@ -93,11 +105,19 @@ const Preview = ({ blog, iseditMode }) => {
             <PreviewPage blog={blog} iseditMode={iseditMode} />
           </div>
           <DialogFooter className="gap-4">
-            <Button variant="outline" onClick={handlesavedraft}>
-              Save as Draft
+            <Button
+              variant="outline"
+              onClick={handlesavedraft}
+              disabled={loading}
+            >
+              {loading ? "Saving Draft..." : "Save as Draft"}
             </Button>
-            <Button variant="default" onClick={handlereduxdata}>
-              Publish
+            <Button
+              variant="default"
+              onClick={handlereduxdata}
+              disabled={loading}
+            >
+              {loading ? "Publishing..." : "Publish"}
             </Button>
           </DialogFooter>
         </DialogContent>

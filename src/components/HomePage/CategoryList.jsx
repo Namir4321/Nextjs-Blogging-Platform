@@ -26,7 +26,7 @@ const CategoryList = ({ setSelectedTag, selectedTag }) => {
       {category.map((categories, i) => (
         <Button
           className={`p-3 rounded-full px-6 capitalize ${
-            selectCategory === categories.toLowerCase() ? "" : "bg-gray-200"
+            selectCategory === categories.toLowerCase() ? "" : "bg-gray-200 dark:bg-muted"
           }`}
           key={i}
           onClick={handleBlogByCategory}

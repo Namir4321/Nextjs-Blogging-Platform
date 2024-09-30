@@ -11,7 +11,7 @@ const page = (searchParams) => {
       <section className="">
         <InPageNavigation
           routes={["published", "Draft"]}
-          defaultHidden={["Draft"]}
+          defaultHidden={[]}
         >
           <Suspense fallback={<LoadingCard />}>
           <BlogContainerDash/>

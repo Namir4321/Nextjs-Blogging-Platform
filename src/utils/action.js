@@ -890,7 +890,6 @@ export const fetchCommentNotification = async (type) => {
   const notified = await db.notification.findMany({
     where: {
       notificationId: userId,
-      seen: false,
       type: type,
     },
     select: {

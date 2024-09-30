@@ -14,7 +14,7 @@ const DashboardPage = () => {
         <h1 className="max-md:hidden  gap-4 mt-4 mb-2">Change Password</h1>
         <div className="mt-2 gap-4 mb-2 w-full md:max-w-[400px]">
           <FormInput
-            className="bg-gray-200 mb-4 pl-6 hover:bg-white outline-none focus-visible:ring-0"
+            className="bg-gray-200 mb-4 pl-6 dark:bg-muted dark:text-white hover:bg-white outline-none focus-visible:ring-0"
             id="change-password"
             name="oldpassword"
             type="text"
@@ -24,7 +24,7 @@ const DashboardPage = () => {
             icon={<CiLock />}
           />
           <FormInput
-            className="bg-gray-200 pl-6 hover:bg-white outline-none focus-visible:ring-0"
+            className="bg-gray-200 pl-6 dark:bg-muted dark:text-white hover:bg-white outline-none focus-visible:ring-0"
             id="change-password"
             name="changepassword"
             type="text"

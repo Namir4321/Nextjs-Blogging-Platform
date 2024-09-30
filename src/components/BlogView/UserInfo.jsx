@@ -14,7 +14,7 @@ const UserInfo = ({profile,published}) => {
           height={50}
           className="h-12 w-12 rounded-full"
         />
-        <p className="capitalize text-black">
+        <p className="capitalize text-black dark:text-white">
           {profile.firstName} {profile.lastName}
           <br />
           <Link href={`/profile/${profile.username}`} className="underline">
@@ -22,7 +22,7 @@ const UserInfo = ({profile,published}) => {
           </Link>
         </p>
       </div>
-        <p className="text-gray-900 opacity-75 max-sm:mt-6 ">
+        <p className="text-gray-900 dark:text-white opacity-75 max-sm:mt-6 ">
           Published on {formatDate(published)}
         </p>
     </div>

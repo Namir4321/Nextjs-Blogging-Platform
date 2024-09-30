@@ -38,13 +38,19 @@ const ReplyCard = ({ notification, userId }) => {
       <div className="pl-5 mt-3 text-gray-500 flex gap-8 ">
         {notification.type !== "like" ? (
           <>
-            <p className="mt-1">
+            <p className="mt-1 dark:text-white">
               {formatDate(notification.comment?.createdAt, "year")}
             </p>
             <Button
               variant="icon"
-              className="m-0 p-0 underline hover:text-black"
-              onClick={()=>{handleDelete(notification.comment.id,notification.blog.id,notification.blog.profileId)}}
+              className="m-0 p-0 underline hover:text-black dark:text-white"
+              onClick={() => {
+                handleDelete(
+                  notification.comment.id,
+                  notification.blog.id,
+                  notification.blog.profileId
+                );
+              }}
             >
               Delete
             </Button>
@@ -52,7 +58,7 @@ const ReplyCard = ({ notification, userId }) => {
               <Button
                 onClick={toggleShow}
                 variant="icon"
-                className="m-0 p-0 underline hover:text-black"
+                className="m-0 p-0 dark:text-white underline hover:text-black"
               >
                 Reply
               </Button>

@@ -8,7 +8,7 @@ const NotificationCard = ({ notification,userId }) => {
   return (
     <div className="mt-2" key={notification.id}>
       <div
-        className={`p-6 border-b border-gray-100 border  ${
+        className={`p-6 border-b border-gray-100 dark:border-background border  ${
           notification.seen == false ? "border-l-black border-l-2" : ""
         }`}
       >
@@ -38,13 +38,13 @@ const NotificationCard = ({ notification,userId }) => {
               </span>
             </h1>
             {notification.type === "reply" ? (
-              <div className="p-4 mt-4 rounded-md bg-gray-100 w-full sm:w-3/2">
+              <div className="p-4 mt-4 rounded-md bg-gray-100  w-full sm:w-3/2">
                 <p>{notification.comment.comment}</p>
               </div>
             ) : (
               <Link
                 href={`/blog/${notification.blog.id}`}
-                className="font-medium text-gray-500 hover:underline line-clamp-1"
+                className="font-medium text-gray-500 dark:text-white hover:underline line-clamp-1"
               >
                 {notification.blog.title}
               </Link>

@@ -9,7 +9,7 @@ const BlogInteraction = async ({ blog }) => {
   const userId = await getAuthUser();
   return (
     <>
-      <hr className="border-gray-200 my-2" />
+      <hr className="border-gray-200 my-2 dark:border-muted-foreground" />
       <div className="flex justify-between gap-6">
         <div className="flex">
           <div className="flex gap-3 items-center">
