@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { GiBullseye } from "react-icons/gi";
+import { FaBlog } from "react-icons/fa";
+
 const Navlogo = () => {
   return (
     <div>
@@ -9,7 +10,7 @@ const Navlogo = () => {
           href="/"
           className="w-[40px] h-[40px] flex items-center justify-center"
         >
-          <GiBullseye className="w-full h-full" />
+          <FaBlog className="w-full h-full" />
         </Link>
       </Button>
     </div>
