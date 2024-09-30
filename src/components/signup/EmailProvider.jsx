@@ -13,32 +13,32 @@ const EmailProvider = () => {
             label="First Name"
             name="firstName"
             type="text"
-            className="bg-slate-50 border-none shadow-none"
+            className="bg-slate-50 dark:bg-muted border-none shadow-none"
           />
           <FormInput
             label="Last Name"
             name="lastName"
             type="text"
-            className="bg-slate-50 border-none shadow-none"
+            className="bg-slate-50 dark:bg-muted border-none shadow-none"
           />
           <FormInput
             label="Email"
             name="email"
             type="email"
-            className="bg-slate-50 w-full border-none shadow-none"
+            className="bg-slate-50 dark:bg-muted w-full border-none shadow-none"
           />
           <FormInput
             label="Password"
             name="password"
             type="password"
-            className="bg-slate-50 border-none shadow-none"
+            className="bg-slate-50 dark:bg-muted border-none shadow-none"
           />
           <FormInput
             label="Confirm Password"
             name="confirmpassword"
             placeholder="Confirm Password"
             type="password"
-            className="bg-slate-50 border-none shadow-none"
+            className="bg-slate-50 dark:bg-muted border-none shadow-none"
           />
         </div>
         <ButtonProp

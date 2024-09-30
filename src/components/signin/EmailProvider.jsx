@@ -12,17 +12,17 @@ const EmailProvider = () => {
           label="Email"
           name="email"
           type="email"
-          className="bg-slate-50 w-full border-none shadow-none"
+          className="bg-slate-50 dark:bg-muted w-full border-none shadow-none"
         />
         <FormInput
           label="Password"
           name="password"
           type="password"
-          className="bg-slate-50 w-full border-none shadow-none"
+          className="bg-slate-50 dark:bg-muted w-full border-none shadow-none"
         />
         <div className="flex flex-col items-center">
           <ButtonProp
-            className="mt-4 max-w-[100px] rounded-full border-none shadow-none"
+            className="mt-4 max-w-[100px]  rounded-full border-none shadow-none"
             text="Sign In"
             variant="default"
             btnsize="lg"

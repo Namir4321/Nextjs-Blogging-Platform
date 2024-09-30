@@ -1,11 +1,19 @@
-import {Button} from "@/components/ui/button";
-import { ButtonProp } from "../form/ButtonProp";
+import { Button } from "@/components/ui/button";
+import { handleGoogleLogin } from "@/lib/Authaction";
+import { FcGoogle } from "react-icons/fc";
+
 const AuthProvider = () => {
   return (
-    <div className="flex flex-col">
-        <ButtonProp className="mt-8 rounded-full" variant='default'size="lg" text='Sign in with Google'/>
-    </div>
-  )
-}
+    <form action={handleGoogleLogin}>
+      <Button
+        variant="ghost"
+        size="lg"
+        className="gap-4 group rounded-full flex justify-start w-full"
+      >
+        <FcGoogle className="w-5 h-5" /> Continue with Google
+      </Button>
+    </form>
+  );
+};
 
-export default AuthProvider
+export default AuthProvider;

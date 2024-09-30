@@ -36,6 +36,7 @@ export const getProfileImage = async () => {
   });
   return profile || null;
 };
+
 export const totalBlogAction = async (tagsearch) => {
   try {
     const whereClause = { draft: false };
@@ -114,7 +115,6 @@ export const fetchBlogAction = async () => {
       const blogs = await db.blog.findMany({
         where: {
           draft: false,
-          // profileId: userId,
         },
 
         select: {
@@ -146,7 +146,6 @@ export const fetchBlogAction = async () => {
       return blogs;
     }
     const blogs = await db.blog.findMany({
-      where: { profileId: userId },
       select: {
         id: true,
         title: true,
@@ -452,7 +451,7 @@ export const EditBlogAction = async (data, Blog) => {
         description: data.description,
         Tag: data.Tag,
         title: data.title,
-        draft:false,
+        draft: false,
       },
     });
   } catch (err) {
@@ -546,6 +545,11 @@ export const toggleFavouriteAction = async ({
 export const AddCommentAction = async (prevState, formData) => {
   try {
     const profileId = await getAuthUser();
+    if (!profileId) {
+      revalidatePath("/signin");
+      return { message: "Login in to comment" };
+    }
+
     const rawData = Object.fromEntries(formData);
     rawData.replyingto = rawData.replyingto === "true";
     const data = { ...rawData, profileId };
@@ -620,6 +624,10 @@ export const fetchComment = async (blogId, take, skip) => {
 export const postCommentReply = async (prevState, formData) => {
   try {
     const profileId = await getAuthUser();
+    if (!profileId) {
+      revalidatePath("/signin");
+      return { message: "Login in to comment" };
+    }
     const rawData = Object.fromEntries(formData);
     rawData.replyingto = rawData.replyingto === "true";
     const data = { ...rawData, profileId };
@@ -646,8 +654,6 @@ export const postCommentReply = async (prevState, formData) => {
         },
       },
     });
-    // const newChildId = comma.children[0].id;
-    // console.log(newChildId);
 
     if (validateFields.blogAuthor !== profileId) {
       const replycomment = await db.notification.create({
@@ -705,9 +711,12 @@ export const fetchCommentReply = async (commentId, take, skip) => {
 };
 
 export const postDeleteReply = async (id, blogId, main, blogAuthor) => {
-  console.log(id);
   try {
     const user = await getAuthUser();
+    if (!user) {
+      revalidatePath("/signin");
+      return { message: "Login in to comment" };
+    }
     const res = await db.comment.delete({
       where: {
         id: id,
@@ -1006,17 +1015,17 @@ export const fetchBlogFilterAction = async (draftFilter) => {
     console.log(err);
   }
 };
-export const DeleteBlogAction = async ({BlogId}) => {
- const userId=await getAuthUser();
- try{
- await db.blog.delete({
-   where: {
-     id: BlogId,
-     profileId: userId,
-   },
- });
- revalidatePath("/setting/blogs");
- }catch(err){
+export const DeleteBlogAction = async ({ BlogId }) => {
+  const userId = await getAuthUser();
+  try {
+    await db.blog.delete({
+      where: {
+        id: BlogId,
+        profileId: userId,
+      },
+    });
+    revalidatePath("/setting/blogs");
+  } catch (err) {
     return { message: err.message };
- }
+  }
 };

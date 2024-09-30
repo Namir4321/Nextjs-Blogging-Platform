@@ -1,3 +1,4 @@
+
 import {
   Sheet,
   SheetContent,
@@ -10,7 +11,9 @@ import { Button } from "../ui/button";
 import { FaRegCommentDots } from "react-icons/fa";
 import CommentField from "@/components/comment/CommentField";
 import CommentRender from "@/components/comment/CommentRender";
-const CommentBox = ({ blog }) => {
+import { getAuthUser } from "@/utils/action";
+const CommentBox = async({ blog }) => {
+  const user=await getAuthUser()
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -23,6 +26,7 @@ const CommentBox = ({ blog }) => {
           <SheetTitle>Comment</SheetTitle>
           <SheetDescription>{blog.title}</SheetDescription>
         </SheetHeader>
+         
         <CommentField blog={blog}/>
         <CommentRender blogId={blog.id}/>
       </SheetContent>

@@ -1,8 +1,12 @@
 import TextAreaInput from "@/components/form/TextAreaInput";
 import { ButtonProp } from "../form/ButtonProp";
 import FormContainer from "../form/FormContainer";
-import { AddCommentAction } from "@/utils/action";
-const CommentField = ({ blog }) => {
+import { AddCommentAction, getAuthUser } from "@/utils/action";
+const CommentField = async({ blog }) => {
+  const user=await getAuthUser();
+  if(!user){
+    
+  }
   return (
     <>
       <FormContainer action={AddCommentAction}>
@@ -10,7 +14,7 @@ const CommentField = ({ blog }) => {
           name="comment"
           row={3}
           placeholder="Leave a comment..."
-          className="bg-gray-50 mb-2"
+          className="bg-gray-50 dark:bg-muted mb-2"
         />
         <input type="hidden" name="blogId" value={blog.id} />
         <input type="hidden" name="replyingto" value="false" />
@@ -21,6 +25,7 @@ const CommentField = ({ blog }) => {
           text="comment"
           size="lg"
           className="mt-2"
+          disabled={!user}
         />
       </FormContainer>
     </>

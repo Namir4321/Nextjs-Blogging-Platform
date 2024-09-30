@@ -4,6 +4,7 @@ import {
   signUpSchema,
   validateWithZodSchema,
 } from "@/utils/FormValidation";
+import bcryptjs from "bcryptjs"
 import { redirect } from "next/navigation";
 import axios from "axios";
 import { signIn, signOut } from "@/auth";
@@ -17,7 +18,9 @@ export const generateUsername = async (email) => {
 export const handleLogout = async () => {
   await signOut();
 };
-
+export const handleGoogleLogin = async () => {
+  await signIn("google");
+};
 export const findUserByEmail = async (email) => {
   if (!email) return null
   const user = await db.profile.findUnique({
@@ -81,4 +84,14 @@ export const handleSignUpAction = async (prevState, formData) => {
     };
   }
   redirect("/");
+};
+
+export const hashPassword = async (password, saltRounds) => {
+  console.log(password);
+  try {
+    const hashedPassword = await bcryptjs.hash(password, saltRounds);
+    return hashedPassword;
+  } catch (err) {
+    return { message: err.message || "Password is not hased" };
+  }
 };

@@ -49,7 +49,7 @@ const NavAuth = async () => {
               type="button"
               text="Sign in"
               btnsize="default"
-              className="rounded-full hidden sm:block"
+              className="rounded-full "
             />
           </Link>
           <Link href="/signup">
@@ -58,7 +58,7 @@ const NavAuth = async () => {
               type="button"
               text="Sign up"
               btnsize="default"
-              className="rounded-full bg-slate-100"
+              className="rounded-full bg-slate-100 dark:bg-muted hidden sm:block"
             />
           </Link>
         </>

@@ -39,10 +39,11 @@ const BlogContainer = ({ selectedTag }) => {
     fetchBlogs();
   }, [selectedTag, search]);
 
+  console.log(blogs)
   if (loading) {
     return <LoadingMainCard />;
   }
-  if (blogs.length === 0) {
+  if (blogs?.length === 0) {
     return (
       <h6 className="flex items-center justify-center bg-gray-100 dark:bg-muted  ">
         No blogs published for the selected category...

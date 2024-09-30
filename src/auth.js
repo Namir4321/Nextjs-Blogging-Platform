@@ -2,8 +2,8 @@ import NextAuth from "next-auth";
 import { authConfig } from "./authConfig";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import db from "@/utils/db";
-import { findUserByEmail } from "./lib/Authaction";
-
+import { findUserByEmail, generateUsername } from "./lib/Authaction";
+import { hashPassword } from "@/lib/Authaction";
 export const {
   handlers: { GET, POST },
   signIn,
@@ -15,10 +15,13 @@ export const {
       try {
         const existingUser = await findUserByEmail(user.email);
         if (!existingUser) {
+          const hashedPassword = await hashPassword("123456789", 10);
           await db.profile.create({
             data: {
               email: user.email,
-              username: user.name,
+              firstName: profile.given_name,
+              lastName: profile.family_name,
+              username: await generateUsername(user.email),
               profileImage: user.image,
               password: hashedPassword,
             },
@@ -42,7 +45,10 @@ export const {
     async jwt({ token, user }) {
       try {
         if (user) {
-          token.sub = user.id;
+          const existingUser = await findUserByEmail(user.email);
+          if (existingUser) {
+            token.sub = existingUser.id;
+          }
         }
         return token;
       } catch (err) {

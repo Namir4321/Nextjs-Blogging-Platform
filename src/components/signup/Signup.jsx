@@ -23,7 +23,7 @@ const Signup = () => {
         <CardFooter>
           <p className="text-sm text-muted-foreground">
             Have account?
-            <span className="text-black underline">
+            <span className="text-black dark:text-white underline">
               <Link href="/signin"> Sign in</Link>
             </span>{" "}
           </p>

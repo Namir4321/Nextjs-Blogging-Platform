@@ -48,7 +48,7 @@ export const CardSubmitButton = ({ isFavourite }) => {
       type="submit"
       size="icon"
       variant="icon"
-      className="p-2 cursor-pointer"
+      className="p-2 cursor-pointer "
     >
       {pending ? (
         <ReloadIcon className="animate-spin" />
