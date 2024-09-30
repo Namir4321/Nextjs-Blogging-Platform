@@ -26,7 +26,7 @@ const NavSearch = ({ placeholder, className }) => {
       <Input
         type="text"
         placeholder={placeholder}
-        className={`rounded-full bg-slate-200 dark:bg-muted h-8 w-8 sm:h-10 sm:w-52 sm:pl-8 outline-none border-none ${className}`}
+        className={`rounded-full bg-slate-200 dark:bg-muted h-8 w-16 sm:h-10 sm:w-52 sm:pl-8 outline-none border-none ${className}`}
         onChange={(e) => {
           setSearch(e.target.value);
           handleSearch(e.target.value);
