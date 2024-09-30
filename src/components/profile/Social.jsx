@@ -17,22 +17,22 @@ const Social = ({ social_links }) => {
     : [];
   const platformIcons = {
     instagram: (
-      <LuInstagram className="text-xl text-gray-500 hover:text-black" />
+      <LuInstagram className="text-xl text-gray-500 dark:bg-background hover:dark:text-white hover:text-black" />
     ),
     youtube: (
-      <LuYoutube className="text-lg text-gray-500 hover:text-black hover:text-xl" />
+      <LuYoutube className="text-lg text-gray-500 dark:bg-background hover:dark:text-white hover:text-black hover:text-xl" />
     ),
     twitter: (
-      <LuTwitter className="text-lg text-gray-500 hover:text-black hover:text-xl" />
+      <LuTwitter className="text-lg text-gray-500 dark:bg-background hover:dark:text-white hover:text-black hover:text-xl" />
     ),
     github: (
-      <LuGithub className="text-lg text-gray-500 hover:text-black hover:text-xl" />
+      <LuGithub className="text-lg text-gray-500 dark:bg-background hover:dark:text-white hover:text-black hover:text-xl" />
     ),
     website: (
-      <LuGlobe className="text-lg text-gray-500 hover:text-black hover:text-xl" />
+      <LuGlobe className="text-lg text-gray-500 dark:bg-background hover:dark:text-white hover:text-black hover:text-xl" />
     ),
     facebook: (
-      <LuFacebook className="text-lg text-gray-500 hover:text-black hover:text-xl" />
+      <LuFacebook className="text-lg text-gray-500 dark:bg-background hover:dark:text-white hover:text-black hover:text-xl" />
     ),
   };
   return (

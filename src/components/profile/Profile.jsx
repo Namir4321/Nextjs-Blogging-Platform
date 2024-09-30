@@ -30,7 +30,7 @@ const Profile = async ({ profileId }) => {
                   <BlogList blogs={blogs} />
                 </div>
               ) : (
-                <p className="container bg-gray-100">No blogs yet</p>
+                <p className="container bg-gray-100 dark:bg-muted">No blogs yet</p>
               )}
             </Suspense>
             <Suspense fallback={<LoadingCard />}>

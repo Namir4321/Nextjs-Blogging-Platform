@@ -799,7 +799,8 @@ export const UpdateProfileAction = async (prevState, formData) => {
       profileUpdateSchema,
       rawData
     );
-    const { id } = await db.Social_Links.findFirst({
+
+    const sociallinks = await db?.Social_Links?.findFirst({
       where: { profileId: profileId },
       select: { id: true },
     });
@@ -807,9 +808,9 @@ export const UpdateProfileAction = async (prevState, formData) => {
       where: { id: profileId },
       data: { username: validateFields.username, bio: validateFields.Bio },
     });
-    if (id) {
+    if (sociallinks) {
       await db.Social_Links.update({
-        where: { id: id },
+        where: { id: sociallinks.id },
         data: {
           youtube: validateFields.youtube,
           instagram: validateFields.instagram,
@@ -819,15 +820,18 @@ export const UpdateProfileAction = async (prevState, formData) => {
           website: validateFields.website,
         },
       });
+      return {message:"profile updated"}
     } else {
-      await db.create.Social_Links.create({
-        profileId: profileId,
-        youtube: validateFields.youtube,
-        instagram: validateFields.instagram,
-        facebook: validateFields.facebook,
-        twitter: validateFields.twitter,
-        github: validateFields.github,
-        website: validateFields.website,
+      await db.Social_Links.create({
+        data: {
+          profileId: profileId,
+          youtube: validateFields.youtube,
+          instagram: validateFields.instagram,
+          facebook: validateFields.facebook,
+          twitter: validateFields.twitter,
+          github: validateFields.github,
+          website: validateFields.website,
+        },
       });
     }
   } catch (err) {
@@ -835,6 +839,7 @@ export const UpdateProfileAction = async (prevState, formData) => {
     return { message: err.message };
   }
   revalidatePath("/setting/edit-profile");
+
 };
 
 export const fetchNotification = async (seenFilter) => {

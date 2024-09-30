@@ -12,7 +12,7 @@ const AboutUser = ({ className, joinedAt, social_links, bio }) => {
       <div>
         <Social social_links={social_links}/>
       </div>
-      <p className="text-sm leading-7 text-black">
+      <p className="text-sm leading-7 text-black dark:text-white">
         Joined on {formatDate(joinedAt)}
       </p>
     </div>

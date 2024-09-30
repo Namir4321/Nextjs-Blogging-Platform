@@ -34,15 +34,17 @@ const NavAuth = async () => {
         </>
       ) : (
         <>
-          <Button
-            variant="ghost"
-            type="button"
-            btnsize="default"
-            className="rounded-full  gap-2 hidden sm:flex"
-          >
-            <LuFileSignature />
-            Write
-          </Button>
+          <Link href="/signin">
+            <Button
+              variant="ghost"
+              type="button"
+              btnsize="default"
+              className="rounded-full  gap-2 hidden sm:flex"
+            >
+              <LuFileSignature />
+              Write
+            </Button>
+          </Link>
           <Link href="/signin">
             <ButtonProp
               variant="default"
