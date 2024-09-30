@@ -18,7 +18,7 @@ const SideNav = () => {
   let [showSideNav, setShowSideNav] = useState(false);
   useEffect(() => {
     const notified = async () => {
-      const notification = await fetchNotification();
+      const notification = await fetchNotification("seen");
       setAlert(notification);
     };
     notified();
@@ -28,9 +28,9 @@ const SideNav = () => {
     setShowSideNav(false);
   }, [pageState]);
   return (
-    <div className="relative flex bg-white dark:bg-background gap-10 py-0 m-0 max-md:flex-col">
+    <div className="relative flex bg-white  dark:bg-background gap-10 py-0 m-0 max-md:flex-col">
       <div className="sticky top-[80px] z-30">
-        <div className="md:hidden bg-white py-1 dark:bg-background  border-gray-100 flex flex-nowrap overflow-x-auto">
+        <div className="md:hidden bg-white py-1 dark:bg-background  border-gray-100 dark:border-muted flex flex-nowrap overflow-x-auto">
           <SideNavDialog
             pageState={pageState}
             setShowSideNav={setShowSideNav}
@@ -39,7 +39,7 @@ const SideNav = () => {
           />
         </div>
         <div
-          className={`min-w-[250px] h-screen   md:sticky top-24 overflow-y-auto p-6 md:pr-0 md:border-gray-100 md:border-r 
+          className={`min-w-[250px] h-screen   md:sticky top-24 overflow-y-auto p-6 md:pr-0 md:border-gray-100 dark:border-muted md:border-r 
             absolute max-md:top-[58px] bg-white dark:bg-background max-md:w-[calc(100%+80px]) max-md:px-1 max-md:ml-0 duration-500 ${
               showSideNav
                 ? "opacity-100 pointer-events-auto"

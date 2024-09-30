@@ -9,7 +9,7 @@ const NotificationCard = ({ notification,userId }) => {
     <div className="mt-2" key={notification.id}>
       <div
         className={`p-6 border-b border-gray-100 dark:border-background border  ${
-          notification.seen == false ? "border-l-black border-l-2" : ""
+          notification.seen == false ? "border-l-black border-l-2  dark:border-l-white " : ""
         }`}
       >
         <div className="flex gap-5 mb-3">
