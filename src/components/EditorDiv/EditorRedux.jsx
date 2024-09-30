@@ -4,12 +4,18 @@ import dynamic from "next/dynamic";
 const EditorBox = dynamic(() => import("@/components/EditorDiv/EditorBox"), {
   ssr: false,
 });
-const EditorRedux = ({ id, data, readOnly,edit }) => {
-  const defaultValue = useSelector((state) => state.blogReducer.content);
-  const contentValue = data ? data : defaultValue ? defaultValue : "";
+const EditorRedux = ({ id, data, readOnly, edit, iseditMode }) => {
+  const createValue = useSelector((state) => state.blogReducer.content);
+  const updateValue = useSelector((state) => state.updateReducer.content);
+  const contentValue = iseditMode ? updateValue : createValue ? createValue : "";
   return (
     <div className="container w-full mx-auto ">
-      <EditorBox defaultValue={contentValue} id={id} readOnly={readOnly} edit={edit} />
+      <EditorBox
+        defaultValue={data||contentValue}
+        id={id}
+        readOnly={readOnly}
+        edit={edit}
+      />
     </div>
   );
 };

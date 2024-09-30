@@ -3,11 +3,11 @@ import FormInput from "@/components/form/FormInput";
 import TagsComponent from "@/components/TagsInput/TagsComponent";
 import { handleAddTag, handleAddTagEdit } from "@/utils/reduxHelper";
 import { useDispatch, useSelector } from "react-redux";
-const TagsInput = ({ updateValue, blog }) => {
-  const tags = useSelector((state) => state.blogReducer.Tag);
+const TagsInput = ({ blog, iseditMode }) => {
+  const createtags = useSelector((state) => state.blogReducer.Tag);
   const updatedtags = useSelector((state) => state.updateReducer.Tag);
   const dispatch = useDispatch();
-  const TagValue = updateValue ? updatedtags : tags ? tags : "";
+  const TagValue = iseditMode ? updatedtags : createtags ? createtags : "";
 
   const handleKeyDown = (e) => {
     if (e.code === "Enter" || e.code === "Comma") {

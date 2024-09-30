@@ -4,23 +4,17 @@ import { useDispatch } from "react-redux";
 import { handleDescChange, handleDescChangeEdit } from "@/utils/reduxHelper";
 import { useSelector } from "react-redux";
 
-const DescriptionInput = ({
-  className,
-  labelText,
-  title,
-  row,
-  updateValue,
-}) => {
+const DescriptionInput = ({ className, labelText, title, row, iseditMode }) => {
   const dispatch = useDispatch();
-  const defaultValue = useSelector((state) => state.blogReducer.description);
+  const createValue = useSelector((state) => state.blogReducer.description);
   const updateDescription = useSelector(
     (state) => state.updateReducer.description
   );
 
-  const descriptionValue = updateValue
+  const descriptionValue = iseditMode
     ? updateDescription
-    : defaultValue
-    ? defaultValue
+    : createValue
+    ? createValue
     : "";
   return (
     <div className="rounded mt-3">
@@ -34,7 +28,7 @@ const DescriptionInput = ({
           placeholder="this is a short descrption"
           className={`focus-visible:ring-none outline-none border-none ${className}`}
           onChange={(e) =>
-            updateValue
+            iseditMode
               ? handleDescChangeEdit(e, dispatch)
               : handleDescChange(e, dispatch)
           }

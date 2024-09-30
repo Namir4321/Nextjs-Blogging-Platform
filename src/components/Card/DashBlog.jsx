@@ -6,6 +6,9 @@ import React, { useState } from "react";
 import { Button } from "../ui/button";
 import StatusCard from "@/components/Card/StatusCard";
 import BlogStatusCard from "./BlogStatusCard";
+import EditblogButton from "@/components/BlogView/EditblogButton";
+import { DeleteBlogAction } from "@/utils/action";
+import FormContainer from "../form/FormContainer";
 const DashBlog = ({ Blog }) => {
   const [show, setShow] = useState(false);
   return (
@@ -31,27 +34,17 @@ const DashBlog = ({ Blog }) => {
             </p>
           </div>
           <div className="flex gap-6 mt-3   ">
-            <Link
-              href={`/blog/create/${Blog.id}`}
-              className="pr-4 py-2 underline"
-            >
-              Edit
-            </Link>
+            <EditblogButton blog={Blog} className="underline  mt-1" />
+
             <Button
               variant="icon"
               size="default"
-              className="lg:hidden pr-4 py-2 underline mt-1"
+              className="lg:hidden pr-4 py-2 underline "
               onClick={() => setShow((prev) => !prev)}
             >
               Stats
             </Button>
-            <Button
-              variant="icon"
-              size="default"
-              className=" text-red-500 pr-4 py-2 underline mt-1"
-            >
-              Delete
-            </Button>
+            <DeleteRental BlogId={Blog.id} />
           </div>
         </div>
         <div className="max-lg:hidden ">
@@ -68,5 +61,14 @@ const DashBlog = ({ Blog }) => {
     </>
   );
 };
-
+const DeleteRental = async ({ BlogId }) => {
+  const DeleteBlogPostAction = DeleteBlogAction.bind(null, { BlogId });
+  return (
+    <FormContainer action={DeleteBlogPostAction}>
+      <Button className="text-red-500 underline" variant="icon" size="default">
+        Delete
+      </Button>
+    </FormContainer>
+  );
+};
 export default DashBlog;

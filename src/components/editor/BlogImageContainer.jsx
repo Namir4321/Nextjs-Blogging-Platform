@@ -15,9 +15,9 @@ import {
 } from "@/utils/reduxHelper";
 import { useDispatch, useSelector } from "react-redux";
 
-const BlogImageContainer = ({ defaultValue }) => {
-  const image = useSelector((state) => state.blogReducer.banner);
+const BlogImageContainer = ({ iseditMode }) => {
   const updateImage = useSelector((state) => state.updateReducer.banner);
+  const newImage = useSelector((state) => state.blogReducer.banner);
   const imageUrl =
     "https://tizqinoyhtxjnpdbotyk.supabase.co/storage/v1/object/public/hotel-booking-images/blog%20banner.png";
 
@@ -27,13 +27,14 @@ const BlogImageContainer = ({ defaultValue }) => {
     if (!image) return null;
     const validateFields = await validateWithZodSchema(imageSchema, { image });
     const fullpath = await UploadImage(validateFields.image);
-    if (defaultValue) {
+    if (iseditMode) {
       handleUpdateBannerEdit(fullpath, dispatch);
     } else {
       handleUpdateBanner(fullpath, dispatch);
     }
   };
-  const imagesrc = defaultValue ? updateImage : image ? image : imageUrl;
+
+  const imagesrc = iseditMode ? updateImage : newImage ? newImage : imageUrl;
   return (
     <div className="mx-auto container">
       <div

@@ -4,6 +4,7 @@ import db from "@/utils/db";
 import {
   BlogSchema,
   commentSchema,
+  DraftSchema,
   imageSchema,
   profileUpdateSchema,
   validateWithZodSchema,
@@ -87,11 +88,35 @@ export const createBlogAction = async (data) => {
   }
   redirect("/");
 };
+
+export const createDraftAction = async (data) => {
+  const user = await getAuthUser();
+  const UserId = user;
+  try {
+    const validateFields = await validateWithZodSchema(DraftSchema, data);
+    const res = await db.blog.create({
+      data: {
+        ...validateFields,
+        profileId: UserId,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return { message: err.message };
+  }
+  redirect("/");
+};
+
 export const fetchBlogAction = async () => {
   const userId = await getAuthUser();
   try {
     if (userId) {
       const blogs = await db.blog.findMany({
+        where: {
+          draft: false,
+          // profileId: userId,
+        },
+
         select: {
           id: true,
           title: true,
@@ -121,6 +146,7 @@ export const fetchBlogAction = async () => {
       return blogs;
     }
     const blogs = await db.blog.findMany({
+      where: { profileId: userId },
       select: {
         id: true,
         title: true,
@@ -155,6 +181,7 @@ export const fetchtrendingBlogAction = async () => {
         { read_count: "desc" },
       ],
       take: 5,
+      where: { draft: false },
       select: {
         id: true,
         title: true,
@@ -178,6 +205,7 @@ export const fetchBlogWithFilterAction = async (tagsearch, search) => {
   try {
     const filterBlog = await db.blog.findMany({
       where: {
+        draft: false,
         OR: [
           { Tag: { has: tagsearch } },
           { title: { contains: search, mode: "insensitive" } },
@@ -368,6 +396,7 @@ export const fetchSimillarBlog = async (
     const filterBlog = await db.blog.findMany({
       take: 2,
       where: {
+        draft: false,
         AND: [
           {
             id: { not: blogId },
@@ -411,6 +440,7 @@ export const fetchSimillarBlog = async (
 export const EditBlogAction = async (data, Blog) => {
   try {
     const UserId = await getAuthUser();
+    console.log(Blog);
     await db.blog.update({
       where: {
         id: Blog,
@@ -422,7 +452,26 @@ export const EditBlogAction = async (data, Blog) => {
         description: data.description,
         Tag: data.Tag,
         title: data.title,
+        draft:false,
       },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+  redirect("/");
+};
+
+export const UpdateDraftAction = async (data, Blog) => {
+  try {
+    const UserId = await getAuthUser();
+    const validateFields = await validateWithZodSchema(DraftSchema, data);
+    console.log(Blog);
+    await db.blog.update({
+      where: {
+        id: Blog,
+        profileId: UserId,
+      },
+      data: validateFields,
     });
   } catch (err) {
     console.log(err);
@@ -902,7 +951,7 @@ export const fetchBlogFilterAction = async (draftFilter) => {
   try {
     if (userId) {
       const blogs = await db.blog.findMany({
-        where: { draft: draftFilter },
+        where: { draft: draftFilter, profileId: userId },
         select: {
           id: true,
           title: true,
@@ -932,6 +981,7 @@ export const fetchBlogFilterAction = async (draftFilter) => {
       return blogs;
     }
     const blogs = await db.blog.findMany({
+      where: { userId: true },
       select: {
         id: true,
         title: true,
@@ -956,4 +1006,18 @@ export const fetchBlogFilterAction = async (draftFilter) => {
   } catch (err) {
     console.log(err);
   }
+};
+export const DeleteBlogAction = async ({BlogId}) => {
+ const userId=await getAuthUser();
+ try{
+ await db.blog.delete({
+   where: {
+     id: BlogId,
+     profileId: userId,
+   },
+ });
+ revalidatePath("/setting/blogs");
+ }catch(err){
+    return { message: err.message };
+ }
 };

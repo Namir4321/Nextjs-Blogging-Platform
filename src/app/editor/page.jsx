@@ -2,9 +2,9 @@ import EditorBanner from "@/components/editor/EditorBanner";
 const EditorPage = () => {
   return (
     <div>
-      <EditorBanner className="container"/>
+      <EditorBanner className="container" iseditMode={false} />
     </div>
-  )
-}
+  );
+};
 
-export default EditorPage
+export default EditorPage;

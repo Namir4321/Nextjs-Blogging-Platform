@@ -1,5 +1,5 @@
-'use client'
-import TextAreaInput  from "@/components/form/TextAreaInput";
+"use client";
+import TextAreaInput from "@/components/form/TextAreaInput";
 import { useDispatch } from "react-redux";
 import {
   handleTitleChange,
@@ -7,11 +7,22 @@ import {
 } from "@/utils/reduxHelper";
 import { useSelector } from "react-redux";
 
-const TitleInput = ({row,name,className,labelText,defaultTitle}) => {
-  const defaultValue = useSelector((state) => state.blogReducer.title);
- const updateValue = useSelector((state) => state.updateReducer.title);
+const TitleInput = ({
+  row,
+  name,
+  className,
+  labelText,
+  iseditMode,
+}) => {
+  const createValue = useSelector((state) => state.blogReducer.title);
+  const updateValue = useSelector((state) => state.updateReducer.title);
   const dispatch = useDispatch();
-  const titleValue = defaultTitle ? updateValue : defaultValue ? defaultValue : "";
+
+  const titleValue = iseditMode
+    ? updateValue
+    : createValue
+    ? createValue
+    : "Enter Title";
   return (
     <TextAreaInput
       labelText={labelText}
@@ -22,7 +33,7 @@ const TitleInput = ({row,name,className,labelText,defaultTitle}) => {
       placeholder="Blog Title"
       className={` focus-visible:ring-none  outline-none border-none ${className} `}
       onChange={(e) =>
-        defaultTitle
+        iseditMode
           ? UpdatehandleTitleChange(e, dispatch)
           : handleTitleChange(e, dispatch)
       }

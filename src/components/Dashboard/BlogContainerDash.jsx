@@ -1,10 +1,10 @@
-import { fetchBlogAction } from "@/utils/action";
+import { fetchBlogAction, fetchBlogFilterAction } from "@/utils/action";
 import DashBlogCard from "@/components/Card/DashBlog";
 
 const BlogContainerDash = async () => {
-  const Blog = await fetchBlogAction(false);
-  if (Blog.length > 0) {
-    <div className="bg-gray-100">No Blog published yet</div>;
+  const Blog = await fetchBlogFilterAction(false);
+  if (Blog.length === 0) {
+    return <div className="container bg-gray-100">No Blog published yet</div>;
   }
   return (
     <div className="container">

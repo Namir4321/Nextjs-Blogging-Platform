@@ -15,12 +15,23 @@ import { Button } from "@/components/ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import FormContainer from "../form/FormContainer";
 import TitleInput from "../TitleInput/TitleInput";
-import { BlogSchema, validateWithZodSchema } from "@/utils/FormValidation";
-import { createBlogAction, EditBlogAction, getAuthUser } from "@/utils/action";
-import { handleReset } from "@/utils/reduxHelper";
+import {
+  BlogSchema,
+  DraftSchema,
+  validateWithZodSchema,
+} from "@/utils/FormValidation";
+import {
+  createBlogAction,
+  createDraftAction,
+  EditBlogAction,
+  getAuthUser,
+  UpdateDraftAction,
+} from "@/utils/action";
+import { handleReset, handleResetEdit } from "@/utils/reduxHelper";
 import { redirect } from "next/navigation";
+import { VscPreview } from "react-icons/vsc";
 
-const Preview = ({ blog }) => {
+const Preview = ({ blog, iseditMode }) => {
   const { toast } = useToast();
   const dispatch = useDispatch();
   const reduxData = useSelector((state) => state.blogReducer);
@@ -30,9 +41,10 @@ const Preview = ({ blog }) => {
       if (blog) {
         const profileId = await getAuthUser();
         const data = { ...updatedRedux, profileId };
+        console.log(blog)
         const validateFields = await validateWithZodSchema(BlogSchema, data);
-         const submitBlog = await EditBlogAction(validateFields,blog);
-          const reset = await handleReset(dispatch);
+        const submitBlog = await EditBlogAction(validateFields, blog);
+        const reset = await handleResetEdit(dispatch);
       } else {
         const profileId = await getAuthUser();
         const data = { ...reduxData, profileId };
@@ -47,11 +59,29 @@ const Preview = ({ blog }) => {
     }
   };
 
+  const handlesavedraft = async () => {
+    if (blog) {
+      const profileId = await getAuthUser();
+      const data = { ...updatedRedux, profileId, draft: true };
+      const validateFields = await validateWithZodSchema(DraftSchema, data);
+      const submitBlog = await UpdateDraftAction(validateFields,blog);
+    const reset = await handleResetEdit(dispatch);
+    } else {
+      const profileId = await getAuthUser();
+      const data = { ...reduxData, profileId, draft: true };
+      const validateFields = await validateWithZodSchema(DraftSchema, data);
+      const submitBlog = await createDraftAction(validateFields);
+      const reset = await handleReset(dispatch);
+    }
+  };
   return (
     <div className="">
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="outline">Preview</Button>
+          <Button variant="default" size="default">
+            <VscPreview className="mr-2" />
+            Preview
+          </Button>
         </DialogTrigger>
 
         <DialogContent className="w-full max-w-[1200px]">
@@ -59,11 +89,13 @@ const Preview = ({ blog }) => {
             <DialogTitle>Preview</DialogTitle>
           </DialogHeader>
           <div className="container grid sm:grid-cols-2 place-items-center ">
-            <EditorPage blog={blog} />
-            <PreviewPage blog={blog} />
+            <EditorPage blog={blog} iseditMode={iseditMode} />
+            <PreviewPage blog={blog} iseditMode={iseditMode} />
           </div>
           <DialogFooter className="gap-4">
-            <Button variant="outline">Save as Draft</Button>
+            <Button variant="outline" onClick={handlesavedraft}>
+              Save as Draft
+            </Button>
             <Button variant="default" onClick={handlereduxdata}>
               Publish
             </Button>

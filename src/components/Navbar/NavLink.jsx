@@ -34,7 +34,7 @@ const NavLink = async () => {
             <Link href="/profile">Profile</Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Link href="/dashboard">Dashboard</Link>
+            <Link href="/setting/blogs">Dashboard</Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Link href="/setting/edit-profile">Setting</Link>

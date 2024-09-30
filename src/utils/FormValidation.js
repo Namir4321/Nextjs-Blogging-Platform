@@ -87,7 +87,24 @@ export const commentSchema = z.object({
   blogId: z.string().uuid("Please login in first to publish"),
   UserId: z.string().uuid("Please login in first to publish").optional(),
   replyingto: z.boolean(),
-  blogAuthor:z.string().uuid("Please login in first to publish").optional(),
+  blogAuthor: z.string().uuid("Please login in first to publish").optional(),
+});
+
+export const DraftSchema = z.object({
+  banner: z.string().url("Invalid URL format").optional(),
+  content: z.object({
+    time: z.number().positive("Invalid timestamp"),
+    blocks: z
+      .array(z.any())
+      .min(1, { message: "There should be at least two Content" }),
+
+    version: z.string(),
+  }),
+  description: z.string().optional(),
+  draft: z.boolean(),
+  Tag: z.array(z.string()).optional(),
+  title: z.string().min(5, "Title is required").max(100, "Title too long"),
+  profileId: z.string().uuid("Please login in first to publish"),
 });
 
 export const profileUpdateSchema = z.object({

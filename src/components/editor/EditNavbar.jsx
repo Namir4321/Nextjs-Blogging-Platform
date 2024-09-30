@@ -5,17 +5,15 @@ import Preview from "@/components/preview/Preview";
 
 
 
-const EditNavbar = ({blog}) => {
+const EditNavbar = ({ blog, iseditMode  }) => {
   return (
-    <nav className="border-b ">
+    <nav className="mt-4">
       <div className="container flex justify-between">
         <div className=" flex flex-row gap-4 py-4 ">
-          <Navlogo />
+          {/* <Navlogo /> */}
         </div>
         <div className="flex gap-4 items-center">
-         
-           <Preview blog={blog}/>
-         
+          <Preview blog={blog} iseditMode={iseditMode} />
         </div>
       </div>
     </nav>

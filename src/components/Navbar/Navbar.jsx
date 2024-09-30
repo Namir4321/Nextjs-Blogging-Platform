@@ -13,6 +13,7 @@ const Navbar = () => {
         </div>
         <div className="flex gap-4 items-center">
           <NavSearch className="sm:hidden" />
+          
           <NavAuth />
         </div>
       </div>

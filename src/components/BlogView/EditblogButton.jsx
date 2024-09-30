@@ -2,15 +2,15 @@
 import { handleBlogData } from "@/utils/reduxHelper";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
-const EditblogButton = ({ blog }) => {
+const EditblogButton = ({ blog,className }) => {
     const dispatch=useDispatch();
   return (
     <div>
-      <p className="underline">
+      <div className={`underline ${className}`}>
         <Link href={`/blog/create/${blog.id}`}>
         <span onClick={(e)=>handleBlogData(blog,dispatch)} >Edit</span>
         </Link>
-      </p>
+      </div>
     </div>
   );
 };
