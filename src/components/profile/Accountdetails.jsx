@@ -27,7 +27,7 @@ const Accountdetails = async({profile}) => {
       {profile.id === user && (
         <div className="=flex justify-center gap-4  mt-2">
           <Link
-            href="/settings/edit-profile"
+            href="/setting/edit-profile"
             className="bg-gray-200 dark:bg-muted rounded-md p-2 "
           >
             Edit Profile

@@ -31,7 +31,7 @@ const UserBlock = ({ search }) => {
         <CiUser className="ml-2" />
       </h1>
       {users.length === 0 ? (
-        <h6 className="flex items-center justify-center bg-gray-100 mt-5">
+        <h6 className="flex items-center justify-center dark:bg-muted bg-gray-100 mt-5">
           No user found for this username...
         </h6>
       ) : (
